@@ -14,7 +14,7 @@ const pwaOptions = {
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-      handler: "CacheFirst" as const, // Fixed: Added 'as const'
+      handler: "CacheFirst" as const,
       options: {
         cacheName: "google-fonts-cache",
         expiration: { maxEntries: 4, maxAgeSeconds: 365 * 24 * 60 * 60 },
@@ -22,7 +22,7 @@ const pwaOptions = {
     },
     {
       urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-      handler: "CacheFirst" as const, // Fixed: Added 'as const'
+      handler: "CacheFirst" as const,
       options: {
         cacheName: "images-cache",
         expiration: { maxEntries: 64, maxAgeSeconds: 24 * 60 * 60 },
@@ -30,7 +30,7 @@ const pwaOptions = {
     },
     {
       urlPattern: /\/_next\/static\/.*/i,
-      handler: "CacheFirst" as const, // Fixed: Added 'as const'
+      handler: "CacheFirst" as const,
       options: {
         cacheName: "next-static-cache",
         expiration: { maxEntries: 32, maxAgeSeconds: 24 * 60 * 60 },
@@ -42,18 +42,18 @@ const pwaOptions = {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone" as const, // Fixed: Added 'as const'
+  output: "standalone" as const,
   images: {
     remotePatterns: [
       {
-        protocol: "https" as const, // Fixed: Added 'as const'
+        protocol: "https" as const,
         hostname: "**",
       },
     ],
   },
-  experimental: {
-    // Turbopack settings Next.js ke latest standards ke mutabiq
-  },
+  // YE DO LINES ZAROORI HAIN VERCEL KE LIYE:
+  turbopack: {}, 
+  webpack: (config:any) => config,
 };
 
 const withPWA = withPWAInit(pwaOptions);
