@@ -41,7 +41,8 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      // "as const" lagane se TypeScript ko pata chal jayega ye fixed cubic-bezier values hain
+      ease: [0.22, 1, 0.36, 1] as const, 
     },
   },
 };
