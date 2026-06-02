@@ -19,7 +19,7 @@ export default function FinalCTA() {
 
         {/* CTA Button */}
         <Link 
-          href="/shop"
+          href="/products"
           className="inline-block bg-[#22D3EE] text-black px-10 py-4 font-black text-xs tracking-[0.2em] uppercase hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.3)] hover:shadow-[0_0_50px_rgba(34,211,238,0.5)] active:scale-95"
         >
           SHOP NOW
