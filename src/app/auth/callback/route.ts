@@ -50,58 +50,97 @@ export async function GET(request: Request) {
   if (data?.user) {
     const userEmail = data.user.email;
     const userId = data.user.id;
-    const sessionToken = data.session.access_token; // 🔥 Token extracted for middleware
+    const sessionToken = data.session.access_token; 
     console.log(`✅ [OAUTH SUCCESS] User: ${userEmail} (${userId})`);
 
-    // New User Flag Check
-    const createdAt = new Date(data.user.created_at).getTime();
-    const lastSignIn = data.user.last_sign_in_at ? new Date(data.user.last_sign_in_at).getTime() : createdAt;
-    const isNewUser = Math.abs(lastSignIn - createdAt) < 60000;
+    // Service role client to bypass RLS safely
+    const supabaseAdmin = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-    // Asynchronous background tasks array
+    // 🔥 FIX 1: CHECK IF PROFILE ALREADY EXISTS
+    let userRole = 'user'; // Default Role
+    let profileExists = false;
+
+    try {
+      const { data: existingProfile } = await supabaseAdmin
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (existingProfile) {
+        userRole = existingProfile.role;
+        profileExists = true;
+      }
+    } catch (err) {
+      console.error("⚠️ Profile check error, assuming new user:", err);
+    }
+
+    const isNewUser = !profileExists;
     const backgroundTasks: Promise<void>[] = [];
 
-    // 1. NEWSLETTER & PROFILE UPDATER MATRIX (RLS BYPASS)
-    if (isNewsletterChecked && userEmail) {
-      console.log(`⏳ Enqueuing DB tasks for newsletter subscription...`);
-      
-      const supabaseAdmin = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      );
-
+    // 🔥 FIX 2: BULLETPROOF PROFILE INITIALIZATION (INSERT VS UPDATE)
+    // 🔥 FIX: PROFILE INITIALIZATION (PASSING BOTH REQUIRED EMAIL & FULL_NAME)
+    if (isNewUser) {
+      console.log(`⏳ Enqueuing CORE Profile Creation for fresh User ID: ${userId}`);
       backgroundTasks.push((async () => {
         try {
-          // Task A: Newsletter table mein email insert karna
+          // Google profile se user ka naam nikaalna
+          const userName = data.user.user_metadata?.full_name || data.user.user_metadata?.name || 'Matrix User';
+
+          const { error: insertErr } = await supabaseAdmin
+            .from('profiles')
+            .insert([{
+              id: userId,
+              role: 'user',
+              newsletter_subscribed: isNewsletterChecked,
+              email: userEmail,   // ✅ Email fix done
+              full_name: userName // 🔥 NEW FIX: Ab full_name bhi database mein chala jayega!
+            }]);
+
+          if (insertErr) {
+            console.error("❌ [PROFILES INSERTION ERROR]:", insertErr);
+          } else {
+            console.log("🎉 [PROFILES TABLE SUCCESS] Fresh row created with Email and Full Name in DB.");
+          }
+        } catch (err: any) {
+          console.error("❌ [PROFILES INSERT CRASH]:", err?.message || err);
+        }
+      })());
+    } else if (isNewsletterChecked) {
+      // Agar purana user hai aur is baar login par newsletter check kiya hai, to sirf UPDATE karein
+      console.log(`⏳ Enqueuing Newsletter Sync for returning user...`);
+      backgroundTasks.push((async () => {
+        try {
+          await supabaseAdmin
+            .from('profiles')
+            .update({ newsletter_subscribed: true })
+            .eq('id', userId);
+          console.log("🎉 [PROFILES TABLE SUCCESS] Returning user profile updated.");
+        } catch (err) {}
+      })());
+    }
+
+    // 3. NEWSLETTER SUBSCRIBERS LIST INJECTION
+    if (isNewsletterChecked && userEmail) {
+      console.log(`⏳ Enqueuing newsletter table subscription...`);
+      backgroundTasks.push((async () => {
+        try {
           const { error: dbErr } = await supabaseAdmin
             .from('newsletter_subscribers')
             .upsert([{ email: userEmail }], { onConflict: 'email' });
 
-          if (dbErr) {
-            console.error("❌ [NEWSLETTER TABLE ERROR]:", dbErr);
-          } else {
-            console.log("🎉 [NEWSLETTER TABLE SUCCESS] Email injected successfully.");
-          }
-
-          // Task B: Profiles table mein flag true karna (Bypassing RLS)
-          const { error: profileUpdateErr } = await supabaseAdmin
-            .from('profiles')
-            .update({ newsletter_subscribed: true })
-            .eq('id', userId);
-
-          if (profileUpdateErr) {
-            console.error("❌ [PROFILES FLAG UPDATE ERROR]:", profileUpdateErr);
-          } else {
-            console.log("🎉 [PROFILES TABLE SUCCESS] newsletter_subscribed set to TRUE.");
-          }
-
+          if (dbErr) console.error("❌ [NEWSLETTER TABLE ERROR]:", dbErr);
+          else console.log("🎉 [NEWSLETTER TABLE SUCCESS] Email injected successfully.");
         } catch (err: any) {
-          console.error("❌ [DB TASK CRASH]:", err?.message || err);
+          console.error("❌ [NEWSLETTER TASK CRASH]:", err?.message || err);
         }
       })());
     }
 
-    // 2. Welcome Email Task
+    // 4. Welcome Email Task (Sirf bilkul naye user ke liye)
     if (isNewUser) {
       console.log(`⏳ Enqueuing Welcome Email...`);
       backgroundTasks.push((async () => {
@@ -126,23 +165,7 @@ export async function GET(request: Request) {
       await Promise.all(backgroundTasks);
     }
 
-    // ─── ROLE SYSTEM ROUTING & COOKIE INJECTION ───
-    let userRole = 'user'; // Default Role
-    try {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', userId)
-        .single();
-
-      if (profile && (profile as any).role) {
-        userRole = (profile as any).role;
-      }
-    } catch (profileErr) {
-      console.error("⚠️ Profile fetch issue, defaulting to user role.");
-    }
-
-    // 🔥 MITIGATE MIDDLEWARE LOCKOUT: Inject secure HTTP-only cookies for 7 Days
+    // ─── COOKIE INJECTION & REDIRECTION ───
     const maxAge = 7 * 24 * 60 * 60; // 7 days in seconds
     const isProd = process.env.NODE_ENV === 'production';
 

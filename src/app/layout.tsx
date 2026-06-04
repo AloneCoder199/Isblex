@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Fottor";
+import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,11 +37,14 @@ export default function RootLayout({
     >
       <body className="h-full bg-[#030712] text-[#F8FAFC] flex flex-col font-sans">
         {/* Structure Fixed: Navbar must reside inside the body tag */}
-        <Navbar />
+       
         
         {/* Main viewing frame */}
         <main className="grow w-full relative">
+          <CartProvider>
+             <Navbar />
           {children}
+          </CartProvider>
         </main>
         <Footer/>
       </body>

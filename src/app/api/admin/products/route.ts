@@ -3,68 +3,46 @@ import { createClient } from '@supabase/supabase-js';
 
 export async function POST(request: Request) {
   try {
+    const body = await request.json();
+    
+    // Admin access bypass ke liye service role client initialize karna
     const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const body = await request.json();
-    
-    // Destructuring all fields
-    const { 
-      name, slug, short_description, description, price, stock, 
-      featured, image_url, is_active, category_id, video_url, 
-      gallery_images, sku 
-    } = body;
-
-    // Server-side Basic Validation
-    if (!name || !price || !slug) {
-      return NextResponse.json({ error: "Required fields (name, slug, price) are missing." }, { status: 400 });
-    }
-
-    // Insert Product
-    const { data: product, error: prodErr } = await supabaseAdmin
+    // Database insertion according to your schema
+    const { data, error } = await supabaseAdmin
       .from('products')
-      .insert([{ 
-        name, 
-        slug, 
-        short_description: short_description || null, 
-        description: description || null, 
-        price: parseFloat(price), 
-        stock: parseInt(stock) || 0, 
-        featured: !!featured, 
-        image_url: image_url || null, 
-        is_active: !!is_active, 
-        category_id: category_id === "" ? null : category_id, // Category handle
-        video_url: video_url || null, 
-        gallery_images: gallery_images || [], 
-        sku: sku || null 
-      }])
-      .select()
-      .single();
+      .insert([
+        {
+          title: body.title,
+          slug: body.slug,
+          summary: body.summary,
+          description: body.description,
+          real_price: parseFloat(body.real_price) || 0,
+          offer_price: parseFloat(body.offer_price) || 0,
+          cost_price: parseFloat(body.cost_price) || 0,
+          sku: body.sku,
+          stock_quantity: parseInt(body.stock_quantity) || 0,
+          low_stock_level: parseInt(body.low_stock_level) || 5,
+          status: body.status || 'draft',
+          images: body.images || [],
+          videos: body.videos || [],
+          category_id: body.category_id, // Must be a valid UUID
+          seo_title: body.seo_title || null,
+          seo_description: body.seo_description || null,
+        },
+      ])
+      .select();
 
-    if (prodErr) {
-      console.error("Supabase Error:", prodErr);
-      throw new Error(prodErr.message);
+    if (error) {
+      console.error("❌ [DB INSERT ERROR]:", error);
+      return NextResponse.json({ success: false, error: error.message }, { status: 400 });
     }
 
-    // Trigger Email Notification (Background)
-    if (is_active) {
-      const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-      const host = request.headers.get('host');
-      
-      // Async trigger, don't wait for it
-      fetch(`${protocol}://${host}/api/admin/notify-subscribers`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product }),
-      }).catch(err => console.error("Auto-Email Notification failed:", err));
-    }
-
-    return NextResponse.json({ success: true, product });
-
+    return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (err: any) {
-    console.error("❌ [API ERROR]:", err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success: false, error: err?.message || "Internal Server Error" }, { status: 500 });
   }
 }

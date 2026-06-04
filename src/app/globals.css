@@ -1,26 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  /* ISBLEX Premium Dark Theme Defaults */
-  --background: #0A0A0A;
-  --foreground: #F8FAFC;
+  /* ISBLEX Pure Cyberpunk Terminal Dark Theme */
+  --background: #09090B;      /* خالص گہرا بیک گراؤنڈ */
+  --foreground: #D4D4D8;      /* کرسپ ٹرمینل ٹیکسٹ (Zinc-300) */
   
-  /* Brand Core Colors */
-  --brand-cyan: #22D3EE;
-  --brand-blue: #0284C7;
-  --brand-dark: #0A0A0A;
-  --brand-card: #111827;
-  --brand-border: #1E293B;
-  --brand-muted: #94A3B8;
+  /* Matrix Core Variables */
+  --brand-cyan: #06B6D4;      /* سائبر پینک سیان ایکسینٹ */
+  --brand-dark: #09090B;      /* کور ڈارک نوڈ */
+  --brand-card: #0B0B0D;      /* ٹرمینل کنٹینر باکس کا کلر */
+  --brand-border: #18181B;    /* بارڈرز کے لیے (Zinc-900) */
+  --brand-muted: #52525B;     /* مدہم کمنٹس اور لیبلز کے لیے (Zinc-600) */
 }
 
-/* Light mode support (Optional: Agar kabhi future me use karna ho) */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #F8FAFC;
-    --foreground: #0A0A0A;
-  }
-}
+/* لائٹ موڈ کو ہٹا کر ڈارک موڈ کو ہی لازمی قرار دے دیا ہے کیونکہ ہیکر ٹرمینل کا کوئی لائٹ موڈ نہیں ہوتا جانی! */
 
 @theme {
   /* Mapping Tailwind Core System to CSS Variables */
@@ -29,15 +22,24 @@
   
   /* ISBLEX Custom Global Utility Classes */
   --color-brand-cyan: var(--brand-cyan);
-  --color-brand-blue: var(--brand-blue);
   --color-brand-dark: var(--brand-dark);
   --color-brand-card: var(--brand-card);
   --color-brand-border: var(--brand-border);
   --color-brand-muted: var(--brand-muted);
 
-  /* Typography Fonts mapping */
-  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  --font-mono: var(--font-geist-mono), monospace;
+  /* Forcing Monospace Font Family Globally for the ultimate Matrix look */
+  --font-sans: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* 🎬 TERMINAL ERROR SHAKE ANIMATION PIPELINE */
+  --animate-shake: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+
+  @keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+    40%, 60% { transform: translate3d(3px, 0, 0); }
+  }
 }
 
 /* Base Document Reset */
@@ -45,7 +47,7 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-sans);
+    font-family: var(--font-mono); /* پورے ہڈ (HUD) پر مونو سپیس لاگو */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
