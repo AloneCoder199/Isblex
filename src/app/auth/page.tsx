@@ -222,56 +222,56 @@ export default function AuthPage() {
   };
 
   return (
-    <section className="min-h-screen bg-[#09090B] text-zinc-300 flex items-center justify-center py-12 px-4 sm:px-6 font-mono mt-10 md:mt-16 selection:bg-cyan-500/20 selection:text-cyan-400">
+    <section className="min-h-screen bg-[#FAF8F5] text-stone-800 flex items-center justify-center py-12 px-4 sm:px-6 font-sans mt-10 md:mt-16 selection:bg-[#E3ECE6] selection:text-[#3A4D3F]">
       
-      <div className={`w-full max-w-md bg-[#0B0B0D] border border-zinc-900 p-6 sm:p-8 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)] transition-transform duration-300 ${shake ? 'animate-shake' : ''}`}>
+      <div className={`w-full max-w-md bg-white border border-[#EBE7E0] p-6 sm:p-8 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] transition-transform duration-300 ${shake ? 'animate-shake' : ''}`}>
         
-        {/* 📟 TERMINAL HEADER */}
-        <div className="border-b border-zinc-950 pb-5 mb-6 space-y-2">
+        {/* 📟 BOTANICAL LUXURY HEADER */}
+        <div className="border-b border-stone-100 pb-5 mb-6 space-y-1.5">
           <div className="flex justify-between items-center">
-            <span className="text-[9px] text-zinc-600 tracking-[0.2em] uppercase">// AUTH_GATE_{isLogin ? "02" : "01"}</span>
-            <span className="text-[9px] text-cyan-400 tracking-widest uppercase">SSL_SECURE</span>
+            <span className="text-[11px] text-[#607262] tracking-[0.15em] font-medium uppercase">Portal Vault // {isLogin ? "02" : "01"}</span>
+            <span className="text-[11px] text-[#A69276] tracking-widest uppercase font-medium">Verified Gateway</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-black tracking-tight uppercase text-zinc-200">
-            ISBLEX_<span className="text-cyan-400">CORE</span>
+          <h1 className="text-2xl sm:text-3xl font-serif font-light tracking-wide text-stone-900">
+            Prifya <span className="text-[#4E6151] font-normal">Atelier</span>
           </h1>
-          <p className="text-[10px] text-zinc-500 tracking-wider">
-            {isLogin ? "ACCESS DECENTRALIZED SECURE PANEL." : "FILL REQUIRED MATRIX NODES TO ENLIST."}
+          <p className="text-xs text-stone-500 tracking-normal">
+            {isLogin ? "Sign in to access your customized botanical ritual dashboard." : "Create your private account to experience tailored organic formulations."}
           </p>
         </div>
 
-        {/* 🎛️ TERMINAL TABS */}
-        <div className="flex gap-2 mb-6">
+        {/* 🎛️ MINIMAL REFINED TABS */}
+        <div className="flex gap-2 mb-6 bg-[#FAF8F5] p-1 rounded-xl border border-[#EBE7E0]">
           <button
             type="button"
             onClick={() => { setIsLogin(false); setMessage({ type: '', text: '' }); }}
-            className={`flex-1 py-2.5 border text-[10px] font-mono transition-all duration-300 uppercase ${
+            className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-300 uppercase tracking-wider ${
               !isLogin 
-                ? 'border-cyan-500 text-cyan-400 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]' 
-                : 'border-zinc-900 text-zinc-600 hover:border-zinc-700 hover:text-zinc-400'
+                ? 'bg-[#4E6151] text-white shadow-sm' 
+                : 'text-stone-400 hover:text-stone-700'
             }`}
           >
-            [01] REGISTER
+            Register
           </button>
           <button
             type="button"
             onClick={() => { setIsLogin(true); setMessage({ type: '', text: '' }); }}
-            className={`flex-1 py-2.5 border text-[10px] font-mono transition-all duration-300 uppercase ${
+            className={`flex-1 py-2 rounded-lg text-xs font-medium transition-all duration-300 uppercase tracking-wider ${
               isLogin 
-                ? 'border-cyan-500 text-cyan-400 bg-cyan-950/10 shadow-[0_0_15px_rgba(6,182,212,0.05)]' 
-                : 'border-zinc-900 text-zinc-600 hover:border-zinc-700 hover:text-zinc-400'
+                ? 'bg-[#4E6151] text-white shadow-sm' 
+                : 'text-stone-400 hover:text-stone-700'
             }`}
           >
-            [02] LOGIN
+            Sign In
           </button>
         </div>
 
         {/* ⚠️ MESSAGE ALERT BOX */}
         {message.text && (
-          <div className={`mb-6 p-3 border text-[10px] uppercase tracking-wider ${
+          <div className={`mb-6 p-3 border text-xs tracking-wide rounded-xl ${
             message.type === 'error' 
-              ? 'border-red-900/50 bg-red-950/10 text-red-400' 
-              : 'border-cyan-900/50 bg-cyan-950/10 text-cyan-400'
+              ? 'border-red-100 bg-red-50 text-red-700' 
+              : 'border-[#E3ECE6] bg-[#F4F7F5] text-[#3A4D3F]'
           }`}>
             {message.text}
           </div>
@@ -282,7 +282,7 @@ export default function AuthPage() {
           onClick={handleGoogleAuth}
           disabled={loading}
           type="button"
-          className="w-full bg-zinc-950 border border-zinc-900 text-zinc-400 text-[10px] font-bold uppercase tracking-widest py-3.5 hover:border-cyan-500/50 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 mb-6 disabled:opacity-50"
+          className="w-full bg-white border border-[#DCD7CE] text-stone-700 text-xs font-medium tracking-wide py-3 rounded-xl hover:border-[#4E6151] hover:bg-[#FAF8F5] transition-all duration-300 flex items-center justify-center gap-3 mb-6 disabled:opacity-50"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -290,51 +290,51 @@ export default function AuthPage() {
             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.63 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
           </svg>
-          [ INITIALIZE_GOOGLE_OAUTH ]
+          Continue with Google
         </button>
 
         {/* DIVIDER */}
         <div className="flex items-center mb-6">
-          <div className="flex-1 border-t border-zinc-900"></div>
-          <span className="px-4 text-[9px] text-zinc-600 tracking-widest uppercase">// OR_USE_CREDENTIALS</span>
-          <div className="flex-1 border-t border-zinc-900"></div>
+          <div className="flex-1 border-t border-stone-100"></div>
+          <span className="px-4 text-[10px] text-stone-400 tracking-widest uppercase font-medium">Or use account details</span>
+          <div className="flex-1 border-t border-stone-100"></div>
         </div>
 
         {/* ⚡ FORM PIPELINE */}
         <form onSubmit={handleAuthSubmit} className="space-y-4">
           {!isLogin && (
             <div className="space-y-1.5">
-              <label className="block text-[9px] text-zinc-500 uppercase tracking-wider">
-                // FULL_NAME_NODE
+              <label className="block text-[11px] text-stone-600 font-medium uppercase tracking-wider">
+                Full Name
               </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="JOHN DOE"
-                className="w-full bg-zinc-950/50 border border-zinc-900 px-4 py-3 text-[11px] text-zinc-200 placeholder-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all uppercase rounded-none"
+                placeholder="John Doe"
+                className="w-full bg-white border border-[#DCD7CE] px-4 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] focus:ring-1 focus:ring-[#4E6151] transition-all rounded-xl"
               />
             </div>
           )}
 
           <div className="space-y-1.5">
-            <label className="block text-[9px] text-zinc-500 uppercase tracking-wider">
-              // EMAIL_NODE
+            <label className="block text-[11px] text-stone-600 font-medium uppercase tracking-wider">
+              Email Address
             </label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="USER@MATRIX.COM"
-              className="w-full bg-zinc-950/50 border border-zinc-900 px-4 py-3 text-[11px] text-zinc-200 placeholder-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all uppercase rounded-none"
+              placeholder="name@example.com"
+              className="w-full bg-white border border-[#DCD7CE] px-4 py-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] focus:ring-1 focus:ring-[#4E6151] transition-all rounded-xl"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-[9px] text-zinc-500 uppercase tracking-wider">
-              // SECURITY_KEY
+            <label className="block text-[11px] text-stone-600 font-medium uppercase tracking-wider">
+              Password
             </label>
             <div className="relative">
               <input
@@ -343,12 +343,12 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-zinc-950/50 border border-zinc-900 px-4 py-3 pr-12 text-[11px] text-zinc-200 placeholder-zinc-700 focus:outline-none focus:border-cyan-500/50 transition-all rounded-none"
+                className="w-full bg-white border border-[#DCD7CE] px-4 py-3 pr-12 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] focus:ring-1 focus:ring-[#4E6151] transition-all rounded-xl"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-cyan-400 transition-colors p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-[#4E6151] transition-colors p-1"
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -358,54 +358,54 @@ export default function AuthPage() {
                 ) : (
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268-2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 )}
               </button>
             </div>
           </div>
 
-          {/* 🔥 FIXED CHECKBOXES HERE */}
+          {/* 🔥 LUXURY REFINED CHECKBOXES */}
           {!isLogin && (
-            <div className="space-y-3 pt-3">
+            <div className="space-y-3 pt-2">
               
               {/* TERMS CHECKBOX */}
-              <label className="flex items-start gap-3 cursor-pointer group p-3 border border-zinc-900 hover:border-zinc-800 transition-all bg-zinc-950/20">
+              <label className="flex items-start gap-3 cursor-pointer group p-3 border border-[#EBE7E0] hover:border-[#DCD7CE] transition-all bg-[#FAF8F5]/40 rounded-xl">
                 <input 
                   type="checkbox" 
                   className="hidden" 
                   checked={agreeTerms} 
                   onChange={(e) => setAgreeTerms(e.target.checked)} 
                 />
-                <div className={`w-4 h-4 mt-0.5 border flex items-center justify-center transition-all ${
-                  agreeTerms ? 'border-cyan-500 bg-cyan-950/20 text-cyan-400' : 'border-zinc-800 bg-zinc-950 text-transparent'
+                <div className={`w-4 h-4 mt-0.5 border rounded flex items-center justify-center transition-all ${
+                  agreeTerms ? 'border-[#4E6151] bg-[#4E6151] text-white' : 'border-stone-300 bg-white text-transparent'
                 }`}>
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300 transition-colors uppercase tracking-wider leading-relaxed">
-                  ACCEPT STRUCTURAL <a href="/terms" onClick={(e) => e.stopPropagation()} className="text-cyan-500 hover:underline">TERMS & CONDITIONS</a>.
+                <span className="text-xs text-stone-500 group-hover:text-stone-800 transition-colors tracking-wide leading-relaxed">
+                  I accept the private premium <a href="/terms" onClick={(e) => e.stopPropagation()} className="text-[#4E6151] font-medium hover:underline">Terms & Conditions</a>.
                 </span>
               </label>
 
               {/* NEWSLETTER CHECKBOX */}
-              <label className="flex items-start gap-3 cursor-pointer group p-3 border border-zinc-900 hover:border-zinc-800 transition-all bg-zinc-950/20">
+              <label className="flex items-start gap-3 cursor-pointer group p-3 border border-[#EBE7E0] hover:border-[#DCD7CE] transition-all bg-[#FAF8F5]/40 rounded-xl">
                 <input 
                   type="checkbox" 
                   className="hidden" 
                   checked={subscribeNewsletter} 
                   onChange={(e) => setSubscribeNewsletter(e.target.checked)} 
                 />
-                <div className={`w-4 h-4 mt-0.5 border flex items-center justify-center transition-all ${
-                  subscribeNewsletter ? 'border-cyan-500 bg-cyan-950/20 text-cyan-400' : 'border-zinc-800 bg-zinc-950 text-transparent'
+                <div className={`w-4 h-4 mt-0.5 border rounded flex items-center justify-center transition-all ${
+                  subscribeNewsletter ? 'border-[#4E6151] bg-[#4E6151] text-white' : 'border-stone-300 bg-white text-transparent'
                 }`}>
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300 transition-colors uppercase tracking-wider leading-relaxed">
-                  SUBSCRIBE TO INTELLIGENCE NEWSLETTERS FEED.
+                <span className="text-xs text-stone-500 group-hover:text-stone-800 transition-colors tracking-wide leading-relaxed">
+                  Subscribe to receive seasonal botanical updates & exclusive batch drops.
                 </span>
               </label>
 
@@ -415,26 +415,26 @@ export default function AuthPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 mt-4 bg-cyan-500 text-[#09090B] text-[10px] font-bold uppercase tracking-widest transition-all duration-300 hover:bg-cyan-400 cursor-pointer shadow-[0_4px_15px_rgba(34,211,238,0.1)] active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+            className="w-full py-3.5 mt-4 bg-[#4E6151] text-white text-xs font-semibold uppercase tracking-widest transition-all duration-300 hover:bg-[#3D4E40] cursor-pointer shadow-sm rounded-xl active:scale-98 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
           >
             {loading ? (
-              '[ TRANSMITTING_DATA... ]'
+              'Processing Request...'
             ) : (
-              isLogin ? '[ EXECUTE_LOGIN ]' : '[ GENERATE_ENLISTMENT ]'
+              isLogin ? 'Sign In Account' : 'Create Ritual Account'
             )}
           </button>
         </form>
 
         {/* 🛡️ FOOTER */}
-        <div className="mt-8 pt-5 border-t border-zinc-950 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-[9px] text-zinc-600 uppercase tracking-widest">
-            <svg className="w-3 h-3 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        <div className="mt-8 pt-5 border-t border-stone-100 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[10px] text-stone-400 font-medium tracking-wider uppercase">
+            <svg className="w-3.5 h-3.5 text-[#4E6151]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
-            <span>SSL_ENCRYPTED</span>
+            <span>Secure SSL Encryption</span>
           </div>
-          <div className="text-[9px] text-zinc-700 uppercase tracking-[0.2em]">
-            SHIELD-V2.6
+          <div className="text-[10px] text-stone-400 tracking-widest uppercase font-medium">
+            Prifya Certified
           </div>
         </div>
       </div>

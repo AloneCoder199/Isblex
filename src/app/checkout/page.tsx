@@ -1,34 +1,32 @@
-import CheckoutClient from "@/components/Checkout/CheckoutClient"; // Apne component ka sahi path check kar lein
+import CheckoutClient from "@/components/Checkout/CheckoutClient";
 
 export const metadata = {
-  title: "Secure Checkout | Premium Digital Store",
-  description: "Complete your order securely using our encrypted 2Checkout gateway.",
+  title: "Secure Checkout | Premium Atelier Collection",
+  description: "Complete your order securely through our encrypted checkout process.",
 };
 
 export default function CheckoutPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground relative overflow-hidden py-12 px-4 sm:px-6 lg:px-8 mt-18">
+    <main className="min-h-screen bg-[#FAF8F5] text-stone-800 py-12 px-4 sm:px-6 lg:px-8 mt-20 font-sans selection:bg-[#E3ECE6] selection:text-[#3A4D3F]">
       
-      {/* Background Subtle Aesthetics */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-20%] w-[600px] h-[600px] bg-brand-blue/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[20%] right-[-25%] w-[500px] h-[500px] bg-brand-cyan/5 rounded-full blur-[100px]" />
-      </div>
-
-      <div className="max-w-5xl mx-auto relative z-10 space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Page Header */}
-        <div className="text-center md:text-left space-y-2 border-b border-brand-border/40 pb-6">
-          <h1 className="text-3xl font-black tracking-tight text-white uppercase sm:text-4xl">
-            Secure <span className="text-brand-cyan">Checkout</span>
+        {/* Elegant Premium Page Header */}
+        <div className="text-left space-y-2 border-b border-stone-200/60 pb-6">
+          <div className="text-[11px] text-[#A69276] tracking-[0.15em] font-medium uppercase">
+            Verified Secure Session
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-serif font-light tracking-wide text-stone-900">
+            Secure <span className="text-[#4E6151] font-normal">Checkout</span>
           </h1>
-          <p className="text-sm text-brand-muted max-w-xl">
-            Janii, apni billing aur card details enter karein. Aapki transaction end-to-end encrypted (PCI-DSS Compliant) hai.
+          <p className="text-xs text-stone-500 max-w-xl tracking-wide leading-relaxed">
+            Please provide your delivery and contact details below to finalize your order. 
+            Your information is fully protected using industry-standard end-to-end encryption protocols.
           </p>
         </div>
 
         {/* The Main Checkout Component Bridge */}
-        <div className="grid grid-cols-1 gap-8">
+        <div className="w-full">
           <CheckoutClient />
         </div>
 

@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Fottor";
+import Footer from "@/components/Fottor"; // 🛠️ Note: Agar aap ne folder ka naam 'Footer' kiya to yahan 'Footer' kar lena
 import { CartProvider } from "@/context/CartContext";
 
 const geistSans = Geist({
@@ -15,14 +15,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Up-to-date Premium Brand Metadata Configuration
+// Professional Viewport for PWA
+export const viewport: Viewport = {
+  themeColor: "#4E6151",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
+// Advanced SEO Metadata
 export const metadata: Metadata = {
-  title: "ISBLEX | Next-Gen Intelligent Lighting Systems",
-  description: "Architectural-grade smart ambient lighting engineered for modern homes. Synchronize your spaces with adaptive circadian spectrums and 16 million colors.",
-  keywords: ["ISBLEX", "Smart Lighting", "Architectural Lighting", "Ambient Lights", "Home Automation"],
+  title: {
+    default: "PRIFYA | Premium Botanical Skincare & Hair Science",
+    template: "%s | PRIFYA Atelier"
+  },
+  description: "Experience the science of nature. PRIFYA delivers high-potency Rosemary & Biotin formulations designed for true cellular transformation and dermal harmony.",
+  keywords: ["PRIFYA", "Botanical Skincare", "Rosemary Hair Serum", "Organic Beauty Science", "Cellular Repair", "Hair Growth Treatment"],
+  authors: [{ name: "Prifya Team" }],
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    locale: "en_PK",
+    url: "https://prifya.com",
+    title: "PRIFYA | Premium Botanical Skincare & Hair Science",
+    description: "High-potency botanical skincare & hair growth solutions.",
+    siteName: "PRIFYA",
+  },
   icons: {
-    icon: "/favicon.ico", // Ensure your favicon is placed inside public/ folder
-  }
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -30,23 +52,48 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+  // 🏢 Global Organization Schema (Google Knowledge Graph ke liye)
+  const globalOrganizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PRIFYA",
+    "url": "https://prifya.com",
+    "logo": "https://prifya.com",
+    "description": "PRIFYA delivers high-potency Rosemary & Biotin formulations designed for true cellular transformation and dermal harmony.",
+    "sameAs": [
+      "https://facebook.com",  // 🔗 Apne sahi social links yahan badal sakte hain
+      "https://instagram.com"
+    ]
+  };
+
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased selection:bg-[#22D3EE]/30 selection:text-[#F8FAFC]`}
+      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth antialiased`}
     >
-      <body className="h-full bg-[#030712] text-[#F8FAFC] flex flex-col font-sans">
-        {/* Structure Fixed: Navbar must reside inside the body tag */}
-       
+      <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/manifest.json" />
         
-        {/* Main viewing frame */}
-        <main className="grow w-full relative">
-          <CartProvider>
-             <Navbar />
-          {children}
-          </CartProvider>
-        </main>
-        <Footer/>
+        {/* Global Google Brand Identity Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(globalOrganizationSchema) }}
+        />
+      </head>
+      
+      <body className="min-h-screen bg-brand-dark text-foreground flex flex-col font-sans selection:bg-brand-border/30 selection:text-foreground">
+        
+        <CartProvider>
+          {/* Main content wrapper */}
+          <main className="flex-grow w-full relative">
+            <Navbar />
+            <article>{children}</article>
+          </main>
+          <Footer />
+        </CartProvider>
+        
       </body>
     </html>
   );

@@ -1,0 +1,34 @@
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = 'https://prifya.com';
+
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: [
+          '/', 
+          '/products', 
+          '/about', 
+          '/contact', 
+          '/privacy', 
+          '/terms', 
+          '/guarantee', 
+          '/refund-policy', 
+          '/shipping-policy', 
+          '/warranty'
+        ],
+        disallow: [
+          '/api/*',          // 🔒 Internal API routes secure karne ke liye
+          '/admin/*',        // 🔒 Dashboard area secure karne ke liye
+          '/checkout/*',     // 🛒 Checkout page block (is ko index nahi hona chahiye)
+          '/cart/*',         // 🛒 Shopping cart page block
+          '/account/*',      // 👤 User profile pages block
+          '/*?*',            // 🔍 Search query parameters block (duplicate content se bachne ke liye)
+        ],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+  };
+}

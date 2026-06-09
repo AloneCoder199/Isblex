@@ -1,37 +1,26 @@
+/* 1. Google Fonts Import (Luxury Serif + Ultra-Readable Clean Sans) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+/* 2. Phir Tailwind import */
 @import "tailwindcss";
 
-:root {
-  /* ISBLEX Pure Cyberpunk Terminal Dark Theme */
-  --background: #09090B;      /* خالص گہرا بیک گراؤنڈ */
-  --foreground: #D4D4D8;      /* کرسپ ٹرمینل ٹیکسٹ (Zinc-300) */
-  
-  /* Matrix Core Variables */
-  --brand-cyan: #06B6D4;      /* سائبر پینک سیان ایکسینٹ */
-  --brand-dark: #09090B;      /* کور ڈارک نوڈ */
-  --brand-card: #0B0B0D;      /* ٹرمینل کنٹینر باکس کا کلر */
-  --brand-border: #18181B;    /* بارڈرز کے لیے (Zinc-900) */
-  --brand-muted: #52525B;     /* مدہم کمنٹس اور لیبلز کے لیے (Zinc-600) */
-}
-
-/* لائٹ موڈ کو ہٹا کر ڈارک موڈ کو ہی لازمی قرار دے دیا ہے کیونکہ ہیکر ٹرمینل کا کوئی لائٹ موڈ نہیں ہوتا جانی! */
-
+/* 3. Phir @theme configuration */
 @theme {
-  /* Mapping Tailwind Core System to CSS Variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   
-  /* ISBLEX Custom Global Utility Classes */
-  --color-brand-cyan: var(--brand-cyan);
-  --color-brand-dark: var(--brand-dark);
-  --color-brand-card: var(--brand-card);
-  --color-brand-border: var(--brand-border);
-  --color-brand-muted: var(--brand-muted);
+  --color-brand-cyan: #8A9A86;   /* Primary (Sage Green) */
+  --color-brand-dark: #FDFBF7;   /* Light Luxury Background */
+  --color-brand-card: #D0C9BC;   /* Surface (Warm Gray/Beige) */
+  --color-brand-border: #B89B72; /* Accent Gold */
+  --color-brand-muted: #6A8F67;  /* Success/Organic Green */
 
-  /* Forcing Monospace Font Family Globally for the ultimate Matrix look */
-  --font-sans: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Dual-Font Setup for Premium Skincare Aesthetics */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'Plus Jakarta Sans', sans-serif;
 
-  /* 🎬 TERMINAL ERROR SHAKE ANIMATION PIPELINE */
+  /* 🎬 ANIMATION PIPELINE */
   --animate-shake: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
 
   @keyframes shake {
@@ -42,14 +31,26 @@
   }
 }
 
-/* Base Document Reset */
+/* 4. Base styles mapping with optimized readability */
+:root {
+  --background: #FDFBF7;
+  --foreground: #3E2A20;
+}
+
 @layer base {
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-mono); /* پورے ہڈ (HUD) پر مونو سپیس لاگو */
+    /* Default body font ab Plus Jakarta Sans hai taake reading smooth ho */
+    font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    letter-spacing: -0.01em;
+  }
+
+  /* Headings automatic luxury serif use karein gi */
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', serif !important;
   }
 }

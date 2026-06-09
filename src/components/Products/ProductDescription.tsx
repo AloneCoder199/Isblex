@@ -6,24 +6,24 @@ export default function ProductDescription({ description }: { description: strin
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="space-y-2">
-      {/* Heading styled exactly like // SELECT_CATEGORY */}
-      <h3 className="text-[9px] font-mono text-zinc-500 tracking-[0.2em] uppercase">
-        // ABOUT_THIS_ITEM
+    <div className="space-y-3 font-sans">
+      {/* Premium minimal label to replace the tech comment */}
+      <h3 className="text-[11px] font-semibold text-[#8A9A86] tracking-[0.2em] uppercase">
+        Product Details & Ritual
       </h3>
       
-      {/* Container matching the dark zinc theme */}
-      <div className="relative bg-[#09090B] border border-zinc-900 p-4 transition-all">
-        <p className={`text-[11px] font-mono text-zinc-400 leading-relaxed whitespace-pre-line ${!isExpanded ? "line-clamp-4" : ""}`}>
+      {/* Container styled with Prifya luxury cream card details */}
+      <div className="relative bg-white border border-[#D0C9BC]/40 p-5 rounded-lg transition-all duration-300">
+        <p className={`text-xs text-[#3E2A20]/80 leading-relaxed whitespace-pre-line tracking-wide ${!isExpanded ? "line-clamp-4" : ""}`}>
           {description}
         </p>
         
-        {/* Button matching the filter button behavior and font */}
+        {/* Soft elegant text button with clean borders and transition */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-3 px-3 py-1.5 border border-zinc-800 text-[9px] font-mono text-zinc-400 whitespace-nowrap hover:border-cyan-500 hover:text-white transition-all uppercase block focus:outline-none"
+          className="mt-4 px-4 py-2 border border-[#D0C9BC] text-[10px] font-medium text-[#3E2A20] tracking-widest whitespace-nowrap hover:border-[#8A9A86] hover:text-[#8A9A86] transition-all duration-300 uppercase block focus:outline-none rounded-md"
         >
-          {isExpanded ? "Show Less ▲" : "See More ▼"}
+          {isExpanded ? "Read Less —" : "Read More +"}
         </button>
       </div>
     </div>

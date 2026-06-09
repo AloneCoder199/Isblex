@@ -1,35 +1,42 @@
 "use client";
 import React, { useRef, useState, useEffect } from 'react';
 
+// Note: Ensure global CSS defines these variables based on previous context:
+// :root {
+//   --font-serif: 'Playfair Display', serif;
+//   --font-sans: 'Plus Jakarta Sans', sans-serif;
+// }
+// Headings use font-serif, body uses font-sans.
+
 export default function OurValues() {
   const values = [
     {
-      meta: "// CORE_VALUE_01",
-      title: "Next-Gen Engineering",
-      demoTitle: "Innovation",
-      desc: "We don't deal in legacy consumer standards. Our engineering matrix focuses on pioneering custom constant-current DC driver topologies, wireless IoT mesh integration, and dynamic circadian mapping algorithms that evolve with your focus requirements.",
-      accent: "from-[#22D3EE] to-[#0284C7]"
+      meta: "// PRIFYA_ESSENCE_01",
+      title: "Botanical Alchemy",
+      demoTitle: "Pioneering Innovation",
+      desc: "We do not formulate with legacy chemical standards. Our formulation alchemy centers on pioneering raw, cold-pressed extraction techniques, synergistic bio-active ingredients, and self-adaptive skincare protocols that evolve with your skin’s dynamic environmental and climatic needs.",
+      accent: "from-[#8A9A86] via-[#D0C9BC] to-[#B89B72]" // Sage Green to Warm Beige to Accent Gold
     },
     {
-      meta: "// CORE_VALUE_02",
-      title: "Aircraft-Grade Benchmarks",
-      demoTitle: "Quality",
-      desc: "Reliability is forged in materials. Every ISBLEX module is carved out of premium anodized aluminum alloys and populated with high-CRI premium emitters. We stress-test our hardware through extreme thermal loads to ensure 0.00% lumen decay over decades.",
-      accent: "from-white via-zinc-400 to-zinc-600"
+      meta: "// PRIFYA_ESSENCE_02",
+      title: "Purity Benchmarks",
+      demoTitle: "Uncompromising Quality",
+      desc: "In skincare, trustworthiness is forged through absolute purity. Every Prifya ingredient is meticulously sourced from premium, ECOCERT-certified organic farms and undergoes rigorous quality control to ensure clinical-grade efficacy and potent stability that endures for decades.",
+      accent: "from-[#B89B72] via-[#D0C9BC] to-[#FDFBF7]" // Accent Gold through Warm Beige to Light Background
     },
     {
-      meta: "// CORE_VALUE_03",
-      title: "Frictionless Integration",
-      demoTitle: "Simplicity",
-      desc: "True sophistication is invisible. We eliminate cognitive clutter by designing proprietary toolless mounting frames and single-cable power delivery trunks. Box se nikal kar matrix activate karne tak, poora process bina kisi complication ke sirf 5 minutes leta hai.",
-      accent: "from-zinc-400 to-zinc-800"
+      meta: "// PRIFYA_ESSENCE_03",
+      title: "Conscious Simplicity",
+      demoTitle: "Effortless Skincare Rituals",
+      desc: "True elegance is found in a sophisticated yet intuitive routine. We eliminate cognitive clutter through our signature multi-tasking formulas. From opening the jar to activating the ritual, the entire process is designed to be effortless, relaxing, and deeply refreshing.",
+      accent: "from-[#6A8F67] to-[#8A9A86]" // Muted Green to Sage Green
     },
     {
-      meta: "// CORE_VALUE_04",
-      title: "Ecosystem Calibration Support",
-      demoTitle: "Customer Satisfaction",
-      desc: "Your workspace is sacred to us. Our relationship doesn't expire at the checkout counter. We offer comprehensive white-glove setup diagnostics, custom modular upgrade consulting, and a lifetime performance guarantee because your visual frame is our priority.",
-      accent: "from-[#0284C7] to-blue-900"
+      meta: "// PRIFYA_ESSENCE_04",
+      title: "Concierge Guidance Support",
+      demoTitle: "Holistic Skin Coaching",
+      desc: "Your skin health is sacred to us. Our relationship transcends the point of purchase. We offer personalized, one-on-one concierge skin coaching, custom ritual diagnostic consulting, and a lifestyle-adaptive performance guarantee, ensuring your radiant glow remains our eternal priority.",
+      accent: "from-[#B89B72] to-[#3E2A20]" // Accent Gold to Deep Cocoa (foreground implicit)
     }
   ];
 
@@ -53,28 +60,29 @@ export default function OurValues() {
   return (
     <section 
       id="our-values" 
-      className="relative bg-[#09090B] text-[#F8FAFC] py-24 lg:py-32 px-4 md:px-8 overflow-hidden border-b border-zinc-900 select-none"
+      className="relative bg-[#FDFBF7] text-[#3E2A20] py-24 lg:py-32 px-4 md:px-8 overflow-hidden border-b border-[#D0C9BC]/50 select-none font-sans"
     >
-      {/* Ambient Grid Backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.02),transparent_40%)] pointer-events-none" />
+      {/* Ambient Grid Backdrop - Switched to Sage Green soft radial */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(138,154,134,0.1),transparent_50%)] pointer-events-none" />
 
       <div className="max-w-7xl w-full mx-auto relative z-10">
         
         {/* ================= SECTION HEADERS ================= */}
-        <div className="flex flex-col items-center text-center mb-12 lg:mb-20 space-y-3 px-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-950 text-[#22D3EE] text-[10px] font-mono tracking-widest uppercase">
-            // INTERNAL OPERATING SYSTEM //
+        <div className="flex flex-col items-center text-center mb-12 lg:mb-20 space-y-4 px-4 font-sans">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#D0C9BC] bg-white text-[#8A9A86] text-[10px] font-medium tracking-widest uppercase shadow-sm">
+            // BOTANICAL OPERATING SYSTEM //
           </div>
-          <h2 className="text-4xl sm:text-5xl font-black tracking-tight uppercase">
-            Our Core Values
+          {/* Main Title is Serif */}
+          <h2 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight text-[#3E2A20] uppercase">
+            Our Core Essences
           </h2>
-          <p className="text-[9px] sm:text-xs text-zinc-500 font-mono tracking-wide max-w-lg mx-auto uppercase">
-            // Swipe Left or Right to Explorer Architecture Matrix //
+          <p className="text-[9px] sm:text-xs text-[#3E2A20]/60 font-medium tracking-wide max-w-lg mx-auto uppercase">
+            // Swipe Left or Right to Explore Essence Matrix //
           </p>
         </div>
 
         {/* ================= MOBILE VIEW: ACTIVE SNAP-TO-CENTER SWAP CAROUSEL ================= */}
-        <div className="block lg:hidden relative w-full">
+        <div className="block lg:hidden relative w-full font-sans">
           
           <div 
             ref={scrollContainerRef}
@@ -90,54 +98,56 @@ export default function OurValues() {
               return (
                 <div 
                   key={val.meta}
-                  className={`w-[82vw] flex-shrink-0 bg-[#0C0C0E] border rounded-2xl p-6 flex flex-col justify-between snap-center relative transition-all duration-500 ease-out ${
+                  className={`w-[82vw] flex-shrink-0 bg-white border rounded-3xl p-7 flex flex-col justify-between snap-center relative transition-all duration-500 ease-out ${
                     isActive 
-                      ? 'border-zinc-700/80 scale-100 opacity-100 shadow-[0_15px_40px_rgba(34,211,238,0.05)]' 
-                      : 'border-zinc-900/40 scale-[0.96] opacity-40 blur-[0.5px]'
+                      ? 'border-[#D0C9BC] scale-100 opacity-100 shadow-[0_15px_40px_rgba(138,154,134,0.08)]' 
+                      : 'border-[#D0C9BC]/40 scale-[0.96] opacity-40 blur-[0.5px]'
                   }`}
                 >
                   {/* Glowing Top Interactive Border line */}
-                  <div className={`absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r ${val.accent} transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-20'}`} />
+                  <div className={`absolute top-0 inset-x-12 h-[2px] bg-gradient-to-r ${val.accent} transition-opacity duration-500 ${isActive ? 'opacity-100' : 'opacity-20'}`} />
                   
-                  <div className="space-y-5">
-                    <div className="flex justify-between items-center font-mono text-[9px]">
-                      <span className={isActive ? "text-cyan-400" : "text-zinc-600"}>{val.meta}</span>
-                      <span className={isActive ? "text-zinc-400 font-bold" : "text-zinc-700"}>// ACTIVE_NODE</span>
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center font-medium text-[10px]">
+                      <span className={isActive ? "text-[#8A9A86]" : "text-[#3E2A20]/60"}>{val.meta}</span>
+                      <span className={isActive ? "text-[#3E2A20]/50 font-semibold" : "text-[#3E2A20]/30"}>// ACTIVE_NODE</span>
                     </div>
 
-                    <div className="space-y-1">
-                      <span className="text-[9px] uppercase font-mono tracking-widest text-zinc-500 block">
+                    <div className="space-y-1.5">
+                      <span className="text-[9px] uppercase font-semibold tracking-widest text-[#B89B72] block">
                         {val.demoTitle}
                       </span>
-                      <h3 className="text-md font-black tracking-tight text-white">
+                      {/* Serif Title for card */}
+                      <h3 className="text-lg font-serif font-semibold tracking-tight text-[#3E2A20]">
                         {val.title}
                       </h3>
                     </div>
 
-                    <p className="text-xs text-zinc-400 font-light leading-relaxed">
+                    <p className="text-xs text-[#3E2A20]/70 font-light leading-relaxed">
                       {val.desc}
                     </p>
                   </div>
 
-                  <div className="pt-5 mt-5 border-t border-zinc-900/60 flex items-center justify-between text-[8px] font-mono tracking-widest text-zinc-600">
-                    <span>SYSTEM_SAFE // 4.0</span>
-                    <div className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${isActive ? 'bg-cyan-400 shadow-[0_0_8px_#22D3EE]' : 'bg-zinc-800'}`} />
+                  <div className="pt-6 mt-6 border-t border-[#D0C9BC]/60 flex items-center justify-between text-[9px] font-medium tracking-widest text-[#3E2A20]/50">
+                    <span>ECO-SAFE // 4.0</span>
+                    {/* Sage Green Dot */}
+                    <div className={`w-2 h-2 rounded-full transition-all duration-500 ${isActive ? 'bg-[#8A9A86] shadow-[0_0_10px_#8A9A86]' : 'bg-[#D0C9BC]'}`} />
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* 🔘 CYBER-STYLE TRACK DOTS INDICATORS */}
-          <div className="flex justify-center items-center gap-2.5 mt-2">
+          {/* 🔘 CONSCIOUS-STYLE TRACK DOTS INDICATORS */}
+          <div className="flex justify-center items-center gap-3 mt-2">
             {values.map((_, dotIndex) => (
               <button
                 key={dotIndex}
                 aria-label={`Go to slide ${dotIndex + 1}`}
                 className={`transition-all duration-300 rounded-full ${
                   dotIndex === activeIndex 
-                    ? 'w-6 h-1 bg-cyan-400 shadow-[0_0_8px_#22D3EE]' 
-                    : 'w-1.5 h-1.5 bg-zinc-800'
+                    ? 'w-6 h-1.5 bg-[#8A9A86] shadow-[0_0_8px_#8A9A86]' 
+                    : 'w-2 h-2 bg-[#D0C9BC]'
                 }`}
               />
             ))}
@@ -146,37 +156,38 @@ export default function OurValues() {
         </div>
 
         {/* ================= DESKTOP VIEW: STABLE FIXED 4-COL MATRIX GRID ================= */}
-        <div className="hidden lg:grid grid-cols-4 gap-6 lg:gap-8">
+        <div className="hidden lg:grid grid-cols-4 gap-6 lg:gap-8 font-sans">
           {values.map((val) => (
             <div 
               key={val.meta}
-              className="group relative bg-[#0C0C0E] border border-zinc-900/80 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:border-zinc-800 hover:bg-[#0e0e11] hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+              className="group relative bg-white border border-[#D0C9BC]/60 rounded-3xl p-7 flex flex-col justify-between transition-all duration-300 hover:border-[#D0C9BC] hover:bg-white/80 hover:shadow-[0_20px_50px_rgba(138,154,134,0.06)]"
             >
-              <div className={`absolute top-0 inset-x-8 h-[1px] bg-gradient-to-r ${val.accent} opacity-20 group-hover:opacity-100 transition-opacity duration-300`} />
+              <div className={`absolute top-0 inset-x-12 h-[2px] bg-gradient-to-r ${val.accent} opacity-30 group-hover:opacity-100 transition-opacity duration-300`} />
               
               <div className="space-y-6">
-                <div className="flex justify-between items-center font-mono text-[9px] text-zinc-600 group-hover:text-cyan-500/60 transition-colors">
+                <div className="flex justify-between items-center font-medium text-[10px] text-[#3E2A20]/50 group-hover:text-[#8A9A86] transition-colors">
                   <span>{val.meta}</span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">// ACTV</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">// ACTIVE</span>
                 </div>
 
-                <div className="space-y-1">
-                  <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-500 block">
+                <div className="space-y-1.5">
+                  <span className="text-[10px] uppercase font-semibold tracking-widest text-[#B89B72] block">
                     {val.demoTitle}
                   </span>
-                  <h3 className="text-lg font-black tracking-tight text-white group-hover:text-[#22D3EE] transition-colors duration-200">
+                  {/* Serif Title for card */}
+                  <h3 className="text-xl font-serif font-semibold tracking-tight text-[#3E2A20] group-hover:text-[#6A8F67] transition-colors duration-200 uppercase">
                     {val.title}
                   </h3>
                 </div>
 
-                <p className="text-xs text-zinc-500 font-light leading-relaxed group-hover:text-zinc-400 transition-colors duration-300">
+                <p className="text-xs text-[#3E2A20]/70 font-light leading-relaxed group-hover:text-[#3E2A20]/90 transition-colors duration-300">
                   {val.desc}
-                </p>
+                  </p>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-zinc-900/60 flex items-center justify-between text-[8px] font-mono tracking-widest text-zinc-600">
-                <span>SYSTEM_SAFE // 4.0</span>
-                <div className="w-1.5 h-1.5 rounded-full bg-zinc-800 group-hover:bg-cyan-400 transition-colors shadow-[0_0_8px_#22D3EE]" />
+              <div className="pt-6 mt-6 border-t border-[#D0C9BC]/60 flex items-center justify-between text-[9px] font-medium tracking-widest text-[#3E2A20]/50 group-hover:text-[#3E2A20]/70">
+                <span>ECO-SAFE // 4.0</span>
+                <div className="w-2 h-2 rounded-full bg-[#D0C9BC] group-hover:bg-[#8A9A86] transition-colors shadow-[0_0_10px_#8A9A86]" />
               </div>
             </div>
           ))}

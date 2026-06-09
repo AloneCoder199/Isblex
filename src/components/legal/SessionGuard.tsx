@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 
-// Client-side Supabase client initialization
+// Initialize the secure client-side database interface
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -16,39 +16,40 @@ export default function SessionGuard({ userId }: { userId: string }) {
   useEffect(() => {
     if (!userId) return;
 
-    console.log(`📡 [REALTIME GUARD] Listening for account deletions for ID: ${userId}`);
+    console.log(`✨ [PRIFYA CONCIERGE] Establishing session validation sync for Patron ID: ${userId}`);
 
-    // 🔥 WebSockets ke zariye sirf is specific User ID ki deletion ko listen karna
+    // Synchronize via active event stream to track account profile status dynamically
     const channel = supabase
-      .channel(`profile-security-${userId}`)
+      .channel(`prifya-patron-guard-${userId}`)
       .on(
         'postgres_changes',
         {
-          event: 'DELETE',      // Sirf tab trigger ho jab row delete ho
+          event: 'DELETE',      // Triggered strictly upon record erasure
           schema: 'public',
-          table: 'profiles',
-          filter: `id=eq.${userId}`, // Sirf is user ki row par nazar rakho
+          table: 'profiles',     // Targets the core registration database
+          filter: `id=eq.${userId}`, // Focused exclusively on this specific patron profile
         },
         async (payload) => {
-          console.log('🚨 [SECURITY WARNING] User profile deleted from DB! Kicking out...');
+          console.warn('✨ [PRIFYA ATELIER] Patron profile update synchronized. Revoking active session credentials...');
           
-          // 1. Clear secure HTTP-only cookies via our API
+          // 1. Clear secure HTTP-only cookies via our authorization API endpoint
           await fetch('/api/auth/logout', { method: 'POST' });
           
-          // 2. Refresh Next.js router cache
+          // 2. Refresh the layout view state and clear router cache
           router.refresh();
           
-          // 3. Send user back to home or login page
+          // 3. Gracefully return the interface to the storefront destination
           router.push('/?error=account_deleted');
         }
       )
       .subscribe();
 
-    // Cleanup connection when component unmounts
+    // Sever the real-time stream channel gracefully when the layout node unmounts
     return () => {
       supabase.removeChannel(channel);
     };
   }, [userId, router]);
 
-  return null; // Yeh component screen par kuch render nahi karega, background worker hai
+  // This background worker operates silently without altering the client user interface visual layout
+  return null;
 }

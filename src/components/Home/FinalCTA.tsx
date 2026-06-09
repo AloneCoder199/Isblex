@@ -1,81 +1,81 @@
 "use client";
 import React from 'react';
-
+import Link from 'next/link'
 export default function FinalCTA() {
-  const handleDeployment = () => {
+  const handleCheckoutRedirection = () => {
     // Add checkout or cart pipeline redirection logic here
-    console.log("Initializing Spatial Deployment pipeline...");
+    console.log("Initializing premium botanical checkout pipeline...");
   };
 
   return (
-    <section className="bg-[#0A0A0A] text-[#F8FAFC] py-28 px-4 md:px-8 border-t border-[#1E293B] relative overflow-hidden">
+    <section className="bg-brand-dark text-foreground py-28 px-4 md:px-8 border-t border-brand-card/40 relative overflow-hidden font-sans">
       
-      {/* FUTURISTIC BACKGROUND RADAR & NEON BLUR LIGHTS */}
+      {/* PREMIUM SOFT GLOW & BOTANICAL AMBIENCE */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-[#3B82F6]/10 blur-[100px] rounded-full" />
-        <div className="absolute -bottom-20 right-0 w-80 h-80 bg-[#22D3EE]/5 blur-[120px] rounded-full" />
-        {/* Abstract Architectural Tech Grid Overlay */}
-        <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-brand-border/5 blur-[100px] rounded-full" />
+        <div className="absolute -bottom-20 right-0 w-80 h-80 bg-brand-card/20 blur-[120px] rounded-full" />
       </div>
 
       <div className="max-w-4xl mx-auto text-center relative z-10 space-y-8 px-2">
         
-        {/* PROTOCOL STATUS BADGE */}
-        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-[#111827] border border-[#1E293B] text-[9px] font-mono tracking-[0.3em] text-[#22D3EE] uppercase mx-auto">
+        {/* LAB BATCH STATUS BADGE */}
+        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-brand-card/20 border border-brand-border/20 text-[9px] font-mono tracking-[0.3em] text-brand-muted uppercase mx-auto">
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-border/40 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-muted" />
           </span>
-          System Status // Production Open
+          Batch Status // Fresh Allocation Open
         </div>
 
-        {/* HIGH-IMPACT ARCHITECTURAL CORE HEADLINE */}
+        {/* HIGH-IMPACT LUXURY SERIF HEADLINE */}
         <div className="space-y-4">
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-light tracking-tight leading-[1.1] text-[#F8FAFC]">
-            Initialize <br className="sm:hidden" /> Your Spatial <br />
-            <span className="font-medium text-transparent bg-clip-text bg-gradient-to-r from-[#22D3EE] via-[#3B82F6] to-[#818cf8]">
-              Genesis Ecosystem.
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-serif font-normal tracking-tight leading-[1.15] text-foreground">
+            Begin Your <br className="sm:hidden" /> True Cellular <br />
+            <span className="font-serif italic text-transparent bg-clip-text bg-gradient-to-r from-foreground via-brand-muted to-brand-border">
+              Transformation.
             </span>
           </h2>
-          <p className="text-xs sm:text-sm md:text-base text-[#94A3B8] font-light max-w-xl mx-auto leading-relaxed">
-            The prototype phase is officially closed. Cease living in standard, washed-out illumination nodes. Secure your monolithic ISBLEX array and alter the structural physics of your habitat today.
+          <p className="text-xs sm:text-sm md:text-base text-brand-muted font-light max-w-xl mx-auto leading-relaxed">
+            Stop feeding your skin and hair synthetic commercial fillers. Secure your pristine bottle from the PRIFYA NEXSKIN collection today, and unlock the raw potency of our cold-extracted Rosemary & Biotin framework.
           </p>
         </div>
 
-        {/* ULTRA-CLEAN MOBILE COMPLIANT ACTION PIPELINE */}
+        {/* ULTRA-CLEAN LUXURY BUTTON CODES */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto pt-4">
-          
-          {/* PRIMARY CALL ACTION */}
-          <button
-            onClick={handleDeployment}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#F8FAFC] text-[#0A0A0A] text-xs font-semibold tracking-wider uppercase hover:bg-[#22D3EE] hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all duration-500 transform active:scale-[0.98] select-none"
-          >
-            Deploy Core Array →
-          </button>
+  
+  {/* PRIMARY CALL ACTION */}
+  <Link href="/checkout" className="w-full sm:w-auto">
+    <button
+      className="w-full sm:w-auto px-8 py-4 rounded-xl bg-foreground text-brand-dark text-xs font-semibold tracking-wider uppercase hover:bg-brand-muted hover:text-foreground hover:shadow-[0_0_30px_rgba(var(--brand-border-rgb),0.2)] transition-all duration-500 transform active:scale-[0.98] select-none"
+    >
+      Claim Your Formula →
+    </button>
+  </Link>
 
-          {/* SECONDARY TECHNICAL SPECS ACTION */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#111827]/60 border border-[#1E293B] text-[#94A3B8] text-xs font-medium tracking-wider uppercase hover:text-[#F8FAFC] hover:border-[#F8FAFC]/30 transition-all duration-300 active:scale-[0.98] select-none"
-          >
-            Review Specs //
-          </button>
-          
-        </div>
+  {/* SECONDARY NAVIGATION ACTION */}
+  <Link href="/contact" scroll={true} className="w-full sm:w-auto">
+    <button
+      className="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-card/10 border border-brand-border/20 text-brand-muted text-xs font-medium tracking-wider uppercase hover:text-foreground hover:border-brand-border/40 transition-all duration-300 active:scale-[0.98] select-none"
+    >
+      Contact
+    </button>
+  </Link>
+  
+</div>
 
         {/* TRUST SIGNALS MATRICES */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-12 border-t border-[#1E293B]/40 max-w-2xl mx-auto text-left">
+        <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-12 border-t border-brand-card/30 max-w-2xl mx-auto text-left">
           <div className="space-y-1">
-            <p className="text-[10px] font-mono text-[#475569] uppercase tracking-widest">// Dispatch</p>
-            <p className="text-xs font-medium text-[#F8FAFC] sm:tracking-wide">Global Coordinates</p>
+            <p className="text-[10px] font-mono text-brand-muted/40 uppercase tracking-widest">// Dispatch</p>
+            <p className="text-xs font-medium text-foreground sm:tracking-wide">Nationwide Delivery</p>
           </div>
-          <div className="space-y-1 border-x border-[#1E293B]/40 px-2 sm:px-6">
-            <p className="text-[10px] font-mono text-[#475569] uppercase tracking-widest">// Warranty</p>
-            <p className="text-xs font-medium text-[#F8FAFC] sm:tracking-wide">2-Year Monolithic</p>
+          <div className="space-y-1 border-x border-brand-card/30 px-2 sm:px-6">
+            <p className="text-[10px] font-mono text-brand-muted/40 uppercase tracking-widest">// Assurance</p>
+            <p className="text-xs font-medium text-foreground sm:tracking-wide">Pure Bio-actives</p>
           </div>
           <div className="space-y-1 pl-2 sm:pl-4">
-            <p className="text-[10px] font-mono text-[#475569] uppercase tracking-widest">// Protocol</p>
-            <p className="text-xs font-medium text-[#F8FAFC] sm:tracking-wide">Secure Checkout</p>
+            <p className="text-[10px] font-mono text-brand-muted/40 uppercase tracking-widest">// Security</p>
+            <p className="text-xs font-medium text-foreground sm:tracking-wide">Encrypted Gateway</p>
           </div>
         </div>
 

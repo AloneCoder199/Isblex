@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | PRIFYA</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            text-align: center; 
+            padding: 20px; 
+            background: #FAF8F5; 
+            color: #4E6151; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            padding: 40px 20px;
+        }
+        .icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 24px;
+            color: #8A9A86;
+            opacity: 0.8;
+        }
+        h1 { 
+            font-weight: 400; 
+            font-size: 24px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #6A7B6D;
+            margin-bottom: 32px;
+        }
+        .retry-btn {
+            background-color: #8A9A86;
+            color: #FAF8F5;
+            border: none;
+            padding: 12px 32px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(138, 154, 134, 0.15);
+        }
+        .retry-btn:hover {
+            background-color: #4E6151;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(138, 154, 134, 0.25);
+        }
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Minimalist Wifi-Off SVG Icon -->
+        <svg class="icon" xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 7.5v.008H12.75V7.5zm0 2.25v.008H12.75V9.75zm0 2.25v.008H12.75V12zm0 2.25v.008H12.75V14.25zM18 10.5v.008H18.008V10.5H18zm0 2.25v.008H18.008V12.75H18zm0 2.25v.008H18.008V15H18zM6 7.5v.008H6.008V7.5H6zm0 2.25v.008H6.008V9.75H6zm0 2.25v.008H6.008V12H6zm0 2.25v.008H6.008V14.25H6zM3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+        </svg>
+
+        <h1>Connection Interrupted</h1>
+        <p>You are currently offline. Prifya formulas will be available once your connection is restored.</p>
+        
+        <!-- Interactive Retry Button -->
+        <button class="retry-btn" onclick="window.location.reload()">Retry Connection</button>
+    </div>
+</body>
+</html>

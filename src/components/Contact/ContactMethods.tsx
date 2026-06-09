@@ -1,67 +1,72 @@
 "use client";
 import React from 'react';
 
+// Assuming global CSS defines:
+// .font-serif { font-family: 'Playfair Display', serif; }
+// .font-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
+
 export default function ContactMethods() {
   const methods = [
     {
-      label: "ENGINEERING SUPPORT",
-      value: "support@isblex.com",
-      status: "ACTIVE_24/7",
-      desc: "Get technical guidance on lighting topologies."
+      label: "SKINCARE ADVISORY",
+      value: "advisory@prifya.com",
+      status: "AVAILABLE",
+      desc: "Guidance on personalized routines and botanical ingredients."
     },
     {
-      label: "ORDER DIAGNOSTICS",
-      value: "orders@isblex.com",
-      status: "ACTIVE_24/7",
-      desc: "Track your shipment or modification requests."
+      label: "ORDER & SHIPPING",
+      value: "concierge@prifya.com",
+      status: "ACTIVE",
+      desc: "Assistance with shipments, returns, and subscription management."
     },
     {
-      label: "PARTNERSHIP GATEWAY",
-      value: "labs@isblex.com",
-      status: "OPEN_FOR_DEV",
-      desc: "For workspace architects and system integrators."
+      label: "PARTNERSHIPS",
+      value: "collaborate@prifya.com",
+      status: "OPEN",
+      desc: "Connect for collaborations, retail inquiries, or press."
     }
   ];
 
   return (
-    <section className="bg-[#09090B] py-20 px-4 md:px-8">
+    <section className="bg-[#FDFBF7] text-[#3E2A20] py-20 px-4 md:px-8 font-sans">
       <div className="max-w-6xl mx-auto">
         
         {/* Section Heading */}
-        <div className="mb-12">
-          <h2 className="text-[10px] font-mono text-[#22D3EE] tracking-[0.3em] uppercase mb-4">// Direct Communication Lines</h2>
+        <div className="mb-12 border-b border-[#D0C9BC] pb-4">
+          <p className="text-xs text-[#8A9A86] tracking-[0.3em] uppercase mb-1">Direct Channels</p>
+          <h2 className="text-xl font-serif font-medium text-[#3E2A20]">Beauty Concierge</h2>
         </div>
 
         {/* Contact Nodes Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {methods.map((method, idx) => (
             <div 
               key={idx}
-              className="group relative bg-[#0C0C0E] border border-zinc-900 p-8 hover:border-zinc-700 transition-all duration-300"
+              className="group relative bg-white border border-[#D0C9BC] p-8 rounded-lg hover:border-[#B89B72]/50 hover:shadow-lg transition-all duration-300"
             >
               {/* Node Header */}
               <div className="flex justify-between items-start mb-6">
-                <span className="text-[9px] font-mono text-zinc-500 tracking-widest">{method.label}</span>
-                <span className="text-[8px] font-mono text-cyan-500 bg-cyan-950/20 px-2 py-1 rounded">{method.status}</span>
+                <span className="text-[10px] font-sans font-semibold text-[#3E2A20]/60 tracking-widest uppercase">{method.label}</span>
+                <span className="text-[10px] font-sans font-medium text-[#8A9A86] bg-[#8A9A86]/10 px-3 py-1 rounded-full">{method.status}</span>
               </div>
 
-              {/* Data Value */}
+              {/* Data Value - Use Serif for elegance */}
               <a 
                 href={`mailto:${method.value}`}
-                className="text-lg font-black text-white hover:text-[#22D3EE] transition-colors block mb-3"
+                className="text-xl font-serif font-medium text-[#3E2A20] hover:text-[#B89B72] transition-colors block mb-4 break-words"
               >
                 {method.value}
               </a>
 
               {/* Description */}
-              <p className="text-[11px] text-zinc-600 font-mono tracking-wide">
+              <p className="text-sm text-[#3E2A20]/80 font-sans font-light leading-relaxed">
                 {method.desc}
               </p>
 
-              {/* Decorative Corner */}
-              <div className="absolute bottom-4 right-4 text-zinc-800 group-hover:text-cyan-500 transition-colors">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" strokeWidth="1.5"/>
+              {/* Decorative Corner - Updated to gold on hover */}
+              <div className="absolute bottom-4 right-4 text-[#D0C9BC] group-hover:text-[#B89B72] transition-colors">
+                <svg width="14" height="14" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 11L11 1M11 1H1M11 1V11" stroke="currentColor" strokeWidth="1.2"/>
                 </svg>
               </div>
             </div>

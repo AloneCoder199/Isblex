@@ -1,31 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Script from "next/script";
-import { createPendingOrder } from "@/app/actions/checkout"; // Apne server action ka exact path check kar lein
-import { CheckoutFormData } from "@/types/checkout";
-import { processSecurePayment } from "@/app/actions/processPayment"; // Apne file structure ke hisab se path set karein
+import { useState } from "react";
 import { useRouter } from 'next/navigation';
-// Assuming your cart item structure
-interface CartItem {
-  id: string;
-  title: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
+import { createCodOrder } from "@/app/actions/checkout"; 
+import { CheckoutFormData } from "@/types/checkout";
+import { useCart } from "@/context/CartContext"; // Linked directly to your context node
 
-interface CheckoutClientProps {
-  cartItems?: CartItem[]; // Yeh prop aapko global state ya localStorage se milega
-}
-
-export default function CheckoutClient({ cartItems = [] }: CheckoutClientProps) {
+export default function CheckoutClient() {
+  const { cart, clearCart, getCartTotal } = useCart(); // Destructured active context streams
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [twoPayLoaded, setTwoPayLoaded] = useState(false);
-   const router = useRouter();
+  const router = useRouter();
 
-  // Form Fields State
+  // Pure Local State Management Configuration
   const [formData, setFormData] = useState<CheckoutFormData>({
     name: "",
     email: "",
@@ -35,319 +22,243 @@ export default function CheckoutClient({ cartItems = [] }: CheckoutClientProps) 
       city: "",
       state: "",
       zipCode: "",
-      country: "US", // Default country code
+      country: "PK", // Localized default structural identifier
     },
   });
 
-  // Calculate Subtotal dynamically on frontend for UI display
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const shipping = subtotal > 0 ? 0 : 0; // Free shipping logic ya jo aapki marzi ho
+  // Dynamic calculations directly mapped from global context stream
+  const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const shipping = 0; // Complimentary atelier processing dispatch
   const total = subtotal + shipping;
-
-  // 2Checkout 2Pay.js initialization
-  useEffect(() => {
-    if (twoPayLoaded && window.TwoPayClient && cartItems.length > 0) {
-      try {
-        // Yahan aap apna SANDBOX Seller ID (Merchant Code) dalenge
-        // Abhi test karne ke liye '250111258734' (example ID) ya apni dummy ID use kar sakte hain
-        const sellerId = process.env.NEXT_PUBLIC_2CHECKOUT_SELLER_ID || "YOUR_TEST_SELLER_ID";
-        
-        const jsPaymentClient = new window.TwoPayClient(sellerId);
-        
-        // 2Checkout ka secure card element component create hota hai
-        const component = jsPaymentClient.components.create("card");
-        
-        // Yeh card element hamare div id="card-element" ke andar mount ho jayega
-        component.mount("#card-element");
-
-        // Keep component instance in global window to access during submit
-        window.twoCheckoutComponent = component;
-      } catch (err) {
-        console.error("2Checkout Component Mount Error:", err);
-      }
-    }
-  }, [twoPayLoaded, cartItems]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>, field: string, isAddress = false) => {
     if (isAddress) {
       setFormData({
         ...formData,
-        shippingAddress: {
-          ...formData.shippingAddress,
-          [field]: e.target.value,
-        },
+        shippingAddress: { ...formData.shippingAddress, [field]: e.target.value },
       });
     } else {
-      setFormData({
-        ...formData,
-        [field]: e.target.value,
-      });
+      setFormData({ ...formData, [field]: e.target.value });
     }
   };
 
- const handleFormSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setErrorMsg("");
-  setLoading(true);
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg("");
+    setLoading(true);
 
-  if (cartItems.length === 0) {
-    setErrorMsg("Aapka cart khaali hai!");
-    setLoading(false);
-    return;
-  }
-
-  try {
-    // Step 1: Database mein order entry "pending" status ke sath create karein
-    const orderPayload = cartItems.map((item) => ({ id: item.id, quantity: item.quantity }));
-    const dbResponse = await createPendingOrder(formData, orderPayload);
-
-    if (!dbResponse.success || !dbResponse.orderId) {
-      setErrorMsg(dbResponse.error || "Order generation failed.");
+    if (cart.length === 0) {
+      setErrorMsg("Aapka shopping bag bilkul khali hai, janii!");
       setLoading(false);
       return;
     }
 
-    // Step 2: 2Checkout Component se Credit Card Token generate karwayein
-    if (!window.twoCheckoutComponent) {
-      setErrorMsg("Payment gateway load nahi ho saka. Kindly page refresh karein.");
+    try {
+      // Map global cart items array structural fields perfectly for the server action backend payload
+      const backendCartPayload = cart.map(item => ({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        quantity: item.quantity,
+        image: item.image
+      }));
+
+      // Execute the unified native Server Action
+      const response = await createCodOrder(formData, backendCartPayload);
+
+      if (!response.success || !response.orderId) {
+        setErrorMsg(response.error || "Order dispatch protocol failed.");
+        setLoading(false);
+        return;
+      }
+
+      // Automatically clears your global cart state node upon successful transaction
+      clearCart();
+
+      // Route parameters to success engine screen smoothly
+      router.push(`/checkout/success?orderId=${response.orderId}&method=COD`);
+      
+    } catch (err) {
+      console.error("Form transmission system error:", err);
+      setErrorMsg("Operational system error occurred processing checkout data.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Customer ki basic billing details jo tokenization ke liye chahiye hoti hain
-    const billingDetails = {
-      name: formData.name,
-      email: formData.email,
-    };
-
-    // 2Checkout server se secure token request karna
-    const tokenResult = await window.twoCheckoutComponent.getPaymentToken(billingDetails);
-
-    if (tokenResult.error) {
-      setErrorMsg(tokenResult.error.message || "Card details ghalat hain janii!");
-      setLoading(false);
-      return;
-    }
-
-    // Token successfully mil gaya!
-    const paymentToken = tokenResult.token;
-    console.log("Generated Token successfully:", paymentToken);
-    console.log("Database Order ID:", dbResponse.orderId);
-
-    // Step 3: FIXED - Token aur Order ID ko backend par bhejna final charge/capture karne ke liye
-    const finalPaymentResult = await processSecurePayment({
-      orderId: dbResponse.orderId,
-      paymentToken: paymentToken,
-      customerEmail: formData.email,
-      customerName: formData.name
-    });
-
-    // Agar 2Checkout API ya database update mein koi error aata hai
-    if (!finalPaymentResult.success) {
-      setErrorMsg(finalPaymentResult.error || "Payment process nahi ho saki.");
-      setLoading(false);
-      return;
-    }
-
-    // TIP: Agar aap LocalStorage cart use kar rahe hain to yahan cart clear karne ka logic likh sakte hain:
-    // localStorage.removeItem("cart");
-
-    // Success redirect! User ko query parameters ke sath confirmation page par bhejein
-    router.push(`/checkout/success?orderId=${finalPaymentResult.orderId}&ref=${finalPaymentResult.reference}`);
-    
-  } catch (err: any) {
-    console.error("Submission crash:", err);
-    setErrorMsg("Koi unexpected error aaya hai checkout ke dauran.");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
-    <>
-      {/* Load 2Checkout SDK script globally safely */}
-      <Script
-        src="https://2pay-js.2checkout.com/v1/2pay.js"
-        strategy="afterInteractive"
-        onLoad={() => setTwoPayLoaded(true)}
-      />
-
-      <div className="min-h-screen bg-background text-foreground py-12 px-4 sm:px-6 lg:px-8 font-sans">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-black text-white tracking-tight uppercase mb-8">
-            Secure <span className="text-brand-cyan">Checkout</span> Matrix
+    <div className="min-h-screen bg-[#FAF8F5] text-stone-800 py-12 px-4 sm:px-6 lg:px-8 font-sans mt-20 selection:bg-[#E3ECE6] selection:text-[#3A4D3F]">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* HEADER SECTION */}
+        <div className="mb-10 border-b border-stone-200/60 pb-6">
+          <h1 className="text-2xl sm:text-3xl font-serif font-light text-stone-900 tracking-wide">
+            Atelier Checkout <span className="text-[#4E6151] font-normal">Process</span>
           </h1>
-
-          {errorMsg && (
-            <div className="bg-red-950/40 border border-red-500/30 text-red-400 p-4 rounded-xl mb-6 text-sm font-mono">
-              ⚠️ {errorMsg}
-            </div>
-          )}
-
-          <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* LEFT COLUMN: Shipping & Credit Card Forms (8 Columns) */}
-            <div className="lg:col-span-7 space-y-6">
-              
-              {/* Shipping Details Card */}
-              <div className="bg-brand-card border border-brand-border rounded-2xl p-6 shadow-xl space-y-4">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider border-b border-brand-border/40 pb-2">
-                  1. Shipping Information
-                </h2>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">Full Name</label>
-                    <input
-                      type="text" required value={formData.name}
-                      onChange={(e) => handleInputChange(e, "name")}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="Shahzada Janii"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">Email Address</label>
-                    <input
-                      type="email" required value={formData.email}
-                      onChange={(e) => handleInputChange(e, "email")}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="janii@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">Phone Number</label>
-                    <input
-                      type="tel" required value={formData.phone}
-                      onChange={(e) => handleInputChange(e, "phone")}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="+92 300 1234567"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">Street Address</label>
-                    <input
-                      type="text" required value={formData.shippingAddress.street}
-                      onChange={(e) => handleInputChange(e, "street", true)}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="House 123, Block A"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">City</label>
-                    <input
-                      type="text" required value={formData.shippingAddress.city}
-                      onChange={(e) => handleInputChange(e, "city", true)}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="Lahore"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">State / Province</label>
-                    <input
-                      type="text" required value={formData.shippingAddress.state}
-                      onChange={(e) => handleInputChange(e, "state", true)}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="Punjab"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-xs font-mono text-brand-muted uppercase">Zip / Postal Code</label>
-                    <input
-                      type="text" required value={formData.shippingAddress.zipCode}
-                      onChange={(e) => handleInputChange(e, "zipCode", true)}
-                      className="w-full bg-background border border-brand-border/60 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-brand-cyan"
-                      placeholder="54000"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* 2Checkout Credit Card Inline Iframe Card */}
-              <div className="bg-brand-card border border-brand-border rounded-2xl p-6 shadow-xl space-y-4">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider border-b border-brand-border/40 pb-2">
-                  2. Secure Payment Methods
-                </h2>
-                
-                <p className="text-xs text-brand-muted font-mono">
-                  Your payment data is fully encrypted and secured by Verifone Compliance.
-                </p>
-
-                {/* CRITICAL HOLDER: Is div ke andar 2Checkout automatic input fields inject karega */}
-                <div className="p-4 bg-background border border-brand-border rounded-xl min-h-[80px]">
-                  <div id="card-element" className="w-full text-white"></div>
-                </div>
-              </div>
-
-            </div>
-
-            {/* RIGHT COLUMN: Sticky Order Summary (4 Columns) */}
-            <div className="lg:col-span-5 bg-brand-card border border-brand-border rounded-2xl p-6 shadow-xl space-y-6 lg:sticky lg:top-10">
-              <h2 className="text-lg font-black text-white uppercase tracking-wider border-b border-brand-border/40 pb-2">
-                Order Summary
-              </h2>
-
-              {/* Cart Items Mapping Layout */}
-              <div className="space-y-4 max-h-[240px] overflow-y-auto pr-2 no-scrollbar">
-                {cartItems.length === 0 ? (
-                  <p className="text-sm text-brand-muted italic">No items selected.</p>
-                ) : (
-                  cartItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-4 border-b border-brand-border/30 pb-3">
-                      <div className="h-12 w-12 rounded-lg bg-background border border-brand-border/60 overflow-hidden shrink-0">
-                        <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-bold text-white truncate">{item.title}</h4>
-                        <p className="text-xs text-brand-muted font-mono">Qty: {item.quantity}</p>
-                      </div>
-                      <span className="text-sm font-black text-brand-cyan font-mono">${(item.price * item.quantity).toFixed(2)}</span>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Pricing Matrix Calculations */}
-              <div className="space-y-2 border-t border-brand-border/40 pt-4 font-mono text-sm">
-                <div className="flex justify-between text-brand-muted">
-                  <span>Subtotal:</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-brand-muted">
-                  <span>Shipping Rates:</span>
-                  <span className="text-emerald-400 font-bold">{shipping === 0 ? "FREE" : `$${shipping}`}</span>
-                </div>
-                <div className="flex justify-between text-white text-base font-black border-t border-brand-border/30 pt-3">
-                  <span className="uppercase">Total Amount:</span>
-                  <span className="text-brand-cyan">${total.toFixed(2)}</span>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading || !twoPayLoaded}
-                className="w-full py-4 bg-gradient-to-r from-brand-blue to-brand-cyan text-brand-dark text-sm font-black uppercase tracking-widest rounded-xl shadow-xl hover:opacity-90 transition-all active:scale-95 disabled:opacity-40"
-              >
-                {loading ? "Processing Securely..." : "Authorize Asset Payment"}
-              </button>
-            </div>
-
-          </form>
+          <p className="text-xs text-stone-500 mt-1 uppercase tracking-wider font-medium">Verify structural dispatch components securely</p>
         </div>
-      </div>
-    </>
-  );
-}
 
-// Global TypeScript deceleration adjustments for 2PayClient scripts
-declare global {
-  interface Window {
-    TwoPayClient: any;
-    twoCheckoutComponent: any;
-  }
+        {errorMsg && (
+          <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-8 text-sm font-medium">
+            ⚠️ {errorMsg}
+          </div>
+        )}
+
+        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* LEFT SIDE: Shipping Data Collection Form Sheets */}
+          <div className="lg:col-span-7 space-y-6">
+            
+            <div className="bg-white border border-[#EBE7E0] rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-5">
+              <h2 className="text-sm font-semibold text-[#4E6151] uppercase tracking-widest border-b border-stone-100 pb-3">
+                1. Shipping Parameters
+              </h2>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">Full Name</label>
+                  <input
+                    type="text" required value={formData.name}
+                    onChange={(e) => handleInputChange(e, "name")}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="E.g., Shahzada Janii"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">Email Address</label>
+                  <input
+                    type="email" required value={formData.email}
+                    onChange={(e) => handleInputChange(e, "email")}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="janii@example.com"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">Phone Number (Active)</label>
+                  <input
+                    type="tel" required value={formData.phone}
+                    onChange={(e) => handleInputChange(e, "phone")}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="e.g., +92 300 1234567"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">Street Address & House No.</label>
+                  <input
+                    type="text" required value={formData.shippingAddress.street}
+                    onChange={(e) => handleInputChange(e, "street", true)}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="House 123, Street 4, Block Area"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">City</label>
+                  <input
+                    type="text" required value={formData.shippingAddress.city}
+                    onChange={(e) => handleInputChange(e, "city", true)}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="Lahore"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">State / Province</label>
+                  <input
+                    type="text" required value={formData.shippingAddress.state}
+                    onChange={(e) => handleInputChange(e, "state", true)}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="Punjab"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-medium text-stone-500 uppercase tracking-wider">Postal / Zip Code</label>
+                  <input
+                    type="text" required value={formData.shippingAddress.zipCode}
+                    onChange={(e) => handleInputChange(e, "zipCode", true)}
+                    className="w-full bg-[#FAF8F5] border border-[#EBE7E0] rounded-xl p-3 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-[#4E6151] transition-colors"
+                    placeholder="54000"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* PAYMENT TYPE IDENTIFICATION SHEET CONTAINER */}
+            <div className="bg-white border border-[#EBE7E0] rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
+              <h2 className="text-sm font-semibold text-[#4E6151] uppercase tracking-widest border-b border-stone-100 pb-3">
+                2. Settlement Method
+              </h2>
+              <div className="p-4 bg-[#FAF8F5] border border-[#4E6151] rounded-xl flex items-start gap-3.5">
+                <div className="mt-0.5 h-4 w-4 shrink-0 rounded-full border-4 border-[#4E6151] bg-white" />
+                <div className="space-y-0.5">
+                  <label className="text-sm font-medium text-stone-900 block font-serif">Cash On Delivery (COD)</label>
+                  <p className="text-xs text-stone-500 tracking-wide leading-relaxed">
+                    No upfront digital transaction fees are processing. Please ensure the settlement allocation balance is prepared upon structural arrival at your doorstep.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* RIGHT SIDE: Interactive Sticky Summary Ledger Dashboard Cards */}
+          <div className="lg:col-span-5 bg-white border border-[#EBE7E0] rounded-2xl p-6 shadow-[0_4px_20px_rgba(0,0,0,0.02)] lg:sticky lg:top-28 space-y-6">
+            <h2 className="text-sm font-semibold text-[#4E6151] uppercase tracking-widest border-b border-stone-100 pb-3">
+              Order Summary
+            </h2>
+
+            {/* Cart Rendering Window Framework */}
+            <div className="space-y-4 max-h-[260px] overflow-y-auto pr-2 scrollbar-thin">
+              {cart.length === 0 ? (
+                <p className="text-sm text-stone-400 italic font-light">Your active inventory tray is empty.</p>
+              ) : (
+                cart.map((item) => (
+                  <div key={item.id} className="flex items-center gap-4 border-b border-stone-100 pb-3.5 last:border-0 last:pb-0">
+                    <div className="h-14 w-14 rounded-xl bg-[#FAF8F5] border border-[#EBE7E0] overflow-hidden shrink-0">
+                      <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-serif font-medium text-stone-900 truncate tracking-wide">{item.title}</h4>
+                      <p className="text-xs text-stone-400 mt-0.5">Quantity Elements: {item.quantity}</p>
+                    </div>
+                    <span className="text-sm font-medium text-stone-800 font-sans">${(item.price * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Total Accounting Stream Parameters */}
+            <div className="space-y-2.5 border-t border-stone-100 pt-4 text-xs tracking-wide">
+              <div className="flex justify-between text-stone-500">
+                <span>Items Subtotal:</span>
+                <span className="text-stone-800 font-medium">${subtotal.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-stone-500">
+                <span>Dispatch Logistics Fee:</span>
+                <span className="text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded text-[11px]">Complimentary</span>
+              </div>
+              <div className="flex justify-between text-stone-900 text-sm font-medium border-t border-stone-100 pt-3.5 font-serif">
+                <span className="uppercase tracking-wider text-xs text-stone-500 font-sans">Payable Balance Amount:</span>
+                <span className="text-base font-semibold text-stone-900 font-sans">${total.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {/* Submit Control Action Button Nodes */}
+            <button
+              type="submit"
+              disabled={loading || cart.length === 0}
+              className="w-full py-3.5 bg-[#4E6151] text-white text-xs font-semibold uppercase tracking-widest rounded-xl shadow-sm hover:bg-[#3D4E40] transition-colors active:scale-[0.98] disabled:opacity-40 disabled:pointer-events-none cursor-pointer"
+            >
+              {loading ? "Confirming Order Dispatch..." : "Confirm Cash on Delivery Order"}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  );
 }

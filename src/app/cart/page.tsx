@@ -7,70 +7,70 @@ export default function CartPage() {
   const { cart, removeFromCart, clearCart, getCartTotal, getCartCount } = useCart();
 
   return (
-    <div className="min-h-screen bg-[#09090B] text-white py-12 px-4 sm:px-6 lg:px-8 font-mono mt-20">
+    <div className="min-h-screen bg-[#FAF8F5] text-stone-800 py-12 px-4 sm:px-6 lg:px-8 font-sans mt-20 selection:bg-[#E3ECE6] selection:text-[#3A4D3F]">
       <div className="max-w-4xl mx-auto space-y-8">
         
-        {/* 📟 TERMINAL NAVIGATION HEAD */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-950 pb-6">
-          <Link href="/products" className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest hover:text-cyan-300 transition-colors">
-            &lt;-- RETURN_TO_CORE_CATALOG
+        {/* 📟 BOTANICAL NAVIGATION HEAD */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-200/60 pb-6">
+          <Link href="/products" className="text-xs font-medium text-[#4E6151] uppercase tracking-wider hover:text-[#3D4E40] transition-colors flex items-center gap-1.5">
+            <span>←</span> Return to Collection
           </Link>
-          <div className="text-right">
-            <div className="text-[9px] text-zinc-600 tracking-[0.2em] uppercase">// SECURE_SESSION</div>
-            <h1 className="text-md sm:text-lg font-black tracking-tight uppercase text-zinc-200">
-              CART_<span className="text-cyan-400">TERMINAL_PIPELINE</span>
+          <div className="text-left sm:text-right">
+            <div className="text-[11px] text-[#A69276] tracking-[0.15em] font-medium uppercase">Verified Atelier Session</div>
+            <h1 className="text-xl sm:text-2xl font-serif font-light tracking-wide text-stone-900">
+              Shopping <span className="text-[#4E6151] font-normal">Bag</span>
             </h1>
           </div>
         </div>
 
         {cart.length === 0 ? (
-          /* ❌ EMPTY MATRIX STATE UI */
-          <div className="text-center py-24 border border-dashed border-zinc-900 bg-[#0B0B0D] space-y-5">
-            <div className="text-zinc-600 text-xs tracking-wider">// TRANSACTION_ERR: MATRIX_PIPELINE_EMPTY</div>
-            <p className="text-[11px] text-zinc-500 max-w-xs mx-auto lowercase first-letter:uppercase">
-              No active data components or lighting assets found staging in your local sandbox.
+          /* ❌ EMPTY RITUAL STATE UI */
+          <div className="text-center py-24 border border-dashed border-[#DCD7CE] bg-white rounded-2xl space-y-5 p-6 shadow-[0_4px_20px_rgba(0,0,0,0.01)]">
+            <div className="text-[#A69276] text-xs font-medium tracking-wider uppercase">Your Selection is Empty</div>
+            <p className="text-sm text-stone-500 max-w-xs mx-auto tracking-wide">
+              No active botanical components or lifestyle items are staging in your private tray.
             </p>
             <Link 
               href="/products" 
-              className="inline-block bg-zinc-950 border border-zinc-900 text-zinc-400 text-[10px] font-bold uppercase tracking-widest px-6 py-3 hover:border-cyan-500/60 hover:text-white hover:bg-cyan-950/5 transition-all duration-300"
+              className="inline-block bg-[#4E6151] text-white text-xs font-semibold uppercase tracking-widest px-6 py-3.5 rounded-xl hover:bg-[#3D4E40] transition-all duration-300 shadow-sm"
             >
-              [LOAD_ASSET_MATRICES]
+              Explore Formulas
             </Link>
           </div>
         ) : (
           /* ⚡ ACTIVE INVOICE PROCESSING ENGINE */
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
             
             {/* Left Column: Core Items Matrix Pipeline */}
             <div className="lg:col-span-2 space-y-4">
-              <div className="text-[9px] text-zinc-600 tracking-wider uppercase pl-1">// ALLOCATED_ASSETS_STREAM</div>
+              <div className="text-[11px] text-[#607262] font-medium tracking-wider uppercase pl-1">Allocated Batch Items</div>
               
               {cart.map((item) => (
                 <div 
                   key={item.id} 
-                  className="group flex items-center gap-4 bg-[#0B0B0D] border border-zinc-900 p-4 transition-all duration-300 hover:border-cyan-500/30"
+                  className="group flex items-center gap-4 bg-white border border-[#EBE7E0] p-4 rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.01)] transition-all duration-300 hover:border-[#4E6151]"
                 >
                   {/* Aspect Media Preview Box */}
-                  <div className="w-16 h-16 bg-zinc-950 border border-zinc-950 overflow-hidden flex-shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" />
+                  <div className="w-16 h-16 bg-[#FAF8F5] border border-[#EBE7E0] overflow-hidden flex-shrink-0 rounded-lg">
+                    <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
 
                   {/* Operational Product Identity Parameters */}
                   <div className="flex-1 min-w-0 space-y-1">
-                    <h2 className="text-xs font-bold text-zinc-300 truncate tracking-tight group-hover:text-cyan-400 transition-colors uppercase">
+                    <h2 className="text-sm font-serif font-medium text-stone-900 truncate tracking-wide group-hover:text-[#4E6151] transition-colors">
                       {item.title}
                     </h2>
-                    <div className="text-[10px] text-zinc-600">
-                      UNIT_VAL: <span className="text-zinc-400">${item.price.toFixed(2)}</span> <span className="text-zinc-700">x</span> {item.quantity}
+                    <div className="text-xs text-stone-500">
+                      Price: <span className="text-stone-800 font-medium">${item.price.toFixed(2)}</span> <span className="text-stone-300 mx-1">|</span> Qty: <span className="text-stone-800 font-medium">{item.quantity}</span>
                     </div>
                   </div>
 
                   {/* Destruct Command Controller */}
                   <button 
                     onClick={() => removeFromCart(item.id)}
-                    className="px-2 py-1.5 border border-zinc-900 text-[9px] text-zinc-500 hover:border-red-900/50 hover:text-red-400 hover:bg-red-950/10 transition-all duration-200 cursor-pointer uppercase"
+                    className="px-3 py-1.5 border border-[#EBE7E0] rounded-lg text-xs font-medium text-stone-400 hover:border-red-200 hover:text-red-600 hover:bg-red-50/50 transition-all duration-200 cursor-pointer"
                   >
-                    [WIPE]
+                    Remove
                   </button>
                 </div>
               ))}
@@ -79,39 +79,42 @@ export default function CartPage() {
               <div className="pt-2">
                 <button 
                   onClick={clearCart}
-                  className="text-[9px] text-zinc-600 hover:text-red-400 transition-colors uppercase tracking-widest pl-1 cursor-pointer"
+                  className="text-xs text-stone-400 hover:text-red-600 font-medium transition-colors flex items-center gap-1.5 pl-1 cursor-pointer"
                 >
-                  ⚠️ CLEAR_ENTIRE_SESSION_BATCH
+                  <span>×</span> Clear Entire Selection
                 </button>
               </div>
             </div>
 
             {/* Right Column: Financial Calculation Matrix Ledger */}
             <div className="space-y-4">
-              <div className="text-[9px] text-zinc-600 tracking-wider uppercase pl-1">// FINANCIAL_LEDGER</div>
+              <div className="text-[11px] text-[#607262] font-medium tracking-wider uppercase pl-1">Order Summary</div>
               
-              <div className="bg-[#0B0B0D] border border-zinc-900 p-6 space-y-6 lg:sticky lg:top-28">
-                <div className="space-y-3 text-[11px] border-b border-zinc-950 pb-4">
-                  <div className="flex justify-between text-zinc-500">
-                    <span>TOTAL_UNITS:</span>
-                    <span className="text-zinc-300 font-bold">{getCartCount()} items</span>
+              <div className="bg-white border border-[#EBE7E0] p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.02)] lg:sticky lg:top-28 space-y-6">
+                <div className="space-y-3 text-xs border-b border-stone-100 pb-4">
+                  <div className="flex justify-between text-stone-500">
+                    <span>Total Items:</span>
+                    <span className="text-stone-800 font-medium">{getCartCount()} items</span>
                   </div>
-                  <div className="flex justify-between text-zinc-500">
-                    <span>SYS_DISPATCH_FEE:</span>
-                    <span className="text-emerald-500 font-bold">STAGING_NULL_FREE</span>
+                  <div className="flex justify-between text-stone-500">
+                    <span>Shipping Fee:</span>
+                    <span className="text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded text-[11px]">Complimentary</span>
                   </div>
                 </div>
 
                 {/* Net Invoiced Pricing Node */}
                 <div className="flex items-baseline justify-between">
-                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">NET_INVOICE:</span>
-                  <span className="text-lg font-black text-cyan-400">${getCartTotal().toFixed(2)}</span>
+                  <span className="text-xs text-stone-600 font-medium uppercase tracking-wider">Estimated Total:</span>
+                  <span className="text-xl font-serif font-semibold text-stone-900">${getCartTotal().toFixed(2)}</span>
                 </div>
 
-                {/* Final Protocol Checkout Trigger */}
-                <button className="w-full py-3 text-center text-[10px] font-bold bg-cyan-500 text-[#09090B] uppercase tracking-widest transition-all duration-300 hover:bg-cyan-400 cursor-pointer shadow-[0_4px_20px_rgba(34,211,238,0.15)] active:scale-98">
-                  EXECUTE_CHECKOUT_PROTOCOL 
-                </button>
+                {/* Final Protocol Checkout Trigger (Converted Button to Link) */}
+                <Link 
+                  href="/checkout" 
+                  className="block w-full py-3.5 text-center text-xs font-semibold bg-[#4E6151] text-white uppercase tracking-widest transition-all duration-300 hover:bg-[#3D4E40] cursor-pointer shadow-sm rounded-xl active:scale-98"
+                >
+                  Proceed to Checkout
+                </Link>
               </div>
             </div>
 

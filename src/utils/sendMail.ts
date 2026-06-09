@@ -1,37 +1,64 @@
 import nodemailer from 'nodemailer';
 
-export async function sendWelcomeEmail(toEmail: string, fullName: string) {
-  // Transporter config - standard domain SMTP settings
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com', // Aap apna SMTP host lagayein
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true', // 465 ke liye true, 587 ke liye false
-    auth: {
-      user: process.env.SMTP_USER, // Aap ki email id
-      pass: process.env.SMTP_PASS, // Aap ka email password ya app password
-    },
-  });
+// Global Transporter Configuration
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
+  secure: process.env.SMTP_SECURE === 'true', // 465 -> true, 587 -> false
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
-  // Cyberpunk/ISBLEX theme HTML payload
+interface EmailOptions {
+  to: string;
+  subject: string;
+  html: string;
+}
+
+/**
+ * 1. Generic Prifya Email Dispatcher (Used for Orders & Transactions)
+ */
+export async function sendEmail({ to, subject, html }: EmailOptions) {
   const mailOptions = {
-    from: `"ISBLEX Core" <${process.env.SMTP_FROM || 'noreply@isblex.com'}>`,
+    from: `"Prifya Atelier" <${process.env.SMTP_FROM || 'noreply@prifya.com'}>`,
+    to: to,
+    subject: subject,
+    html: html,
+  };
+
+  return transporter.sendMail(mailOptions);
+}
+
+/**
+ * 2. Premium Welcome Email for Registered Patrons (Skincare Theme)
+ */
+export async function sendWelcomeEmail(toEmail: string, fullName: string) {
+  const mailOptions = {
+    from: `"Prifya Atelier" <${process.env.SMTP_FROM || 'noreply@prifya.com'}>`,
     to: toEmail,
-    subject: '⚡ [ISBLEX] System Access Granted - Welcome to the Matrix',
+    subject: 'Welcome to Prifya | Your Skincare Journey Begins',
     html: `
-      <div style="background-color: #0A0A0A; color: #F8FAFC; font-family: monospace; padding: 40px; border: 1px solid #1E293B; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #22D3EE; text-transform: uppercase; letter-spacing: 2px;">// ACCESS INITIALIZED</h2>
-        <hr style="border-color: #1E293B; margin-bottom: 20px;" />
-        <p>Greetings <strong>${fullName}</strong>,</p>
-        <p>Your identity node has been successfully synchronized and registered into the ISBLEX database matrix.</p>
-        
-        <div style="background-color: #111827; border: 1px solid #22D3EE; padding: 15px; margin: 20px 0; font-size: 13px; color: #94A3B8;">
-          <strong>NODE STATUS:</strong> OPERATIONAL<br/>
-          <strong>SECURE ANCHOR:</strong> ${toEmail}
+      <div style="background-color: #FAF8F5; color: #292524; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 40px; border: 1px solid #EBE7E0; max-width: 600px; margin: 0 auto; border-radius: 12px;">
+        <div style="text-align: center; margin-bottom: 25px;">
+          <h2 style="color: #4E6151; font-family: Georgia, serif; font-weight: 300; font-size: 24px; margin: 0; text-transform: uppercase; letter-spacing: 1px;">Welcome to Prifya</h2>
+          <p style="font-size: 11px; color: #A69276; tracking: 0.1em; text-transform: uppercase; margin-top: 5px;">Pure Care. Radiant Results.</p>
         </div>
         
-        <p>You can now log in and access your decentralized security panel management interface.</p>
+        <hr style="border: 0; border-top: 1px solid #EBE7E0; margin-bottom: 25px;" />
+        
+        <p style="font-size: 14px; color: #44403C; line-height: 1.6;">Dear <strong>${fullName}</strong>,</p>
+        <p style="font-size: 14px; color: #44403C; line-height: 1.6;">Thank you for joining the Prifya community. We are delighted to accompany you on your journey toward healthy, radiant, and beautifully nourished skin.</p>
+        
+        <div style="background-color: #FFFFFF; border: 1px solid #EBE7E0; padding: 18px; margin: 25px 0; font-size: 13px; color: #57534E; line-height: 1.6; border-radius: 8px;">
+          <strong style="color: #4E6151;">ACCOUNT STATUS:</strong> ACTIVE & OPERATIONAL<br/>
+          <strong style="color: #4E6151;">REGISTERED EMAIL:</strong> ${toEmail}
+        </div>
+        
+        <p style="font-size: 14px; color: #44403C; line-height: 1.6;">You can now log in to explore your personalized skincare selections, save your preferred rituals, and seamlessly track your future orders.</p>
         <br />
-        <p style="font-size: 11px; color: #64748B;">This is an automated encrypted transmission. Do not reply to this node.</p>
+        <p style="font-size: 11px; color: #8C8A85; border-top: 1px solid #E7E5E4; padding-top: 15px; margin-top: 15px;">This is an automated notification tracking string from Prifya Atelier. Please do not reply directly to this message.</p>
       </div>
     `,
   };

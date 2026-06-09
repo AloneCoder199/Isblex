@@ -10,24 +10,64 @@ import LifestyleSolution from "@/components/Home/ProblemSolution";
 import ShopByRoom from "@/components/Home/ShopByRoom";
 import SocialFeed from "@/components/Home/SocialFeed";
 import WhyChooseIsblex from "@/components/Home/WhyChooseIsblex";
-import Image from "next/image";
+
+// SEO Meta Data (Next.js App Router ke liye bohot zaroori)
+export const metadata = {
+  title: "Prifya | High-Potency Botanical Skincare & Hair Growth",
+  description: "Prifya provides high-potency botanical skincare and hair growth science, focusing on cellular transformation and dermal harmony.",
+  openGraph: {
+    title: "Prifya",
+    description: "High-Potency Botanical Skincare & Hair Growth Science",
+    url: "https://prifya.com",
+    siteName: "Prifya",
+    images: [
+      {
+        url: "https://prifya.com/logo.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+};
 
 export default function Home() {
+  // JSON-LD Schema Data Object
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Prifya",
+    "url": "https://prifya.com",
+    "logo": "https://prifya.com/logo.png",
+    "description": "Prifya provides high-potency botanical skincare and hair growth science, focusing on cellular transformation and dermal harmony.",
+    "sameAs": [
+      "https://facebook.com/prifya",
+      "https://instagram.com/prifya"
+    ]
+  };
+
   return (
     <>
-    
-    <HeroSection/>
-    <BeforeAfterSlider/>
-    <FeaturedCategories/>
-    <BestSellers/>
-    <LifestyleSolution/>
-    <ShopByRoom/>
-    <CustomerReviewsUGC/>
-    <BrandStory/>
-    <WhyChooseIsblex/>
-    <SocialFeed/>
-    <FAQSection/>
-    <FinalCTA/>
+      {/* Google SEO Schema Script */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      {/* Aap ke Page ke Components */}
+      <HeroSection />
+      <BeforeAfterSlider />
+      <FeaturedCategories />
+      <BestSellers />
+      <LifestyleSolution />
+      <ShopByRoom />
+      <CustomerReviewsUGC />
+      <BrandStory />
+      <WhyChooseIsblex />
+      <SocialFeed />
+      <FAQSection />
+      <FinalCTA />
     </>
   );
 }

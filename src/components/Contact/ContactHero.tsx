@@ -2,43 +2,49 @@
 import React from 'react';
 import Link from 'next/link';
 
+// Headings uses font-serif, body uses font-sans (as defined in global system).
+
 export default function ContactHero() {
   return (
-    <section className="relative bg-[#09090B] text-[#F8FAFC] py-24 lg:py-32 px-4 md:px-8 overflow-hidden border-b border-zinc-900">
-      {/* Background Matrix Mesh */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,0.08),transparent_70%)] pointer-events-none" />
+    <section 
+      id="contact-hero" 
+      className="relative bg-[#FDFBF7] text-[#3E2A20] py-24 lg:py-32 px-4 md:px-8 overflow-hidden border-b border-[#D0C9BC]/50 select-none font-sans"
+    >
+      {/* Background Organic Glow (Soft rose/gold bloom) */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,228,225,0.4),transparent_70%)] pointer-events-none" />
 
-      <div className="max-w-3xl mx-auto relative z-10 text-center">
+      <div className="max-w-4xl mx-auto relative z-10 text-center">
         
-        {/* Node Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-950 text-[#22D3EE] text-[9px] font-mono tracking-[0.2em] uppercase mb-8">
-          // ACCESS_POINT: TECHNICAL_CALIBRATION
+        {/* Beauty Concierge Badge */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[#D0C9BC] bg-white text-[#B89B72] text-[10px] font-sans tracking-[0.25em] uppercase select-none font-semibold shadow-sm mb-10">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B89B72] animate-pulse" />
+            BEAUTY CONCIERGE // PERSONAL CARE
         </div>
 
-        {/* High-Value Headline */}
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9] mb-8">
-          Architectural <br />
-          <span className="text-zinc-500">Support Node</span>
+        {/* High-Value Headline (Luxury Serif) */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-[#3E2A20] leading-tight max-w-3xl mx-auto mb-10 pb-1">
+          Your Journey <br />
+          <span className="text-[#B89B72] italic">To Radiance Begins</span>
         </h1>
         
-        {/* Value-Driven Subtext */}
-        <p className="text-sm md:text-base text-zinc-400 font-light tracking-[0.05em] mb-12 max-w-xl mx-auto uppercase leading-relaxed">
-          Need precision calibration for your workspace? Whether it’s integration support, order diagnostics, or custom lighting topology advice, our engineering team is here to ensure your ISBLEX system operates at 0.00% friction.
+        {/* Wellness-Driven Subtext (Clean sans-serif) */}
+        <p className="text-[13px] sm:text-sm md:text-base text-[#3E2A20]/80 font-sans font-light leading-relaxed max-w-2xl mx-auto mb-16 px-4">
+          Have questions about creating your perfect organic routine? Whether it’s product advice, order guidance, or holistic skin health consultation, our beauty experts are here to help you reveal your innate glow.
         </p>
 
-        {/* Action Buttons */}
+        {/* Luxury Action Buttons (Rounded) */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Link 
-            href="mailto:support@isblex.com"
-            className="w-full sm:w-auto px-8 py-4 bg-white text-black font-mono text-[10px] font-bold tracking-[0.2em] uppercase hover:bg-zinc-200 transition-all active:scale-95"
+            href="mailto:care@prifya.com"
+            className="w-full sm:w-auto px-10 py-4 bg-[#8A9A86] text-white font-sans text-xs font-semibold uppercase tracking-widest rounded-full hover:bg-[#6A8F67] transition-all duration-300 shadow-sm active:scale-95 flex items-center justify-center gap-2"
           >
-            INITIATE SUPPORT TICKET
+            CONTACT THE SKINCARE EXPERTS
           </Link>
           <Link 
-            href="/shop"
-            className="w-full sm:w-auto px-8 py-4 bg-transparent border border-zinc-800 text-zinc-400 font-mono text-[10px] font-bold tracking-[0.2em] uppercase hover:border-zinc-500 hover:text-white transition-all active:scale-95"
+            href="/products"
+            className="w-full sm:w-auto px-10 py-4 bg-transparent border border-[#3E2A20]/40 text-[#3E2A20]/80 font-sans text-xs font-semibold uppercase tracking-widest rounded-full hover:border-[#3E2A20]/70 hover:text-[#3E2A20] transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
           >
-            BROWSE HARDWARE CATALOG
+            EXPLORE ORGANIC COLLECTION
           </Link>
         </div>
       </div>

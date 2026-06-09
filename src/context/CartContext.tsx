@@ -13,7 +13,8 @@ export interface CartItem {
 
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  // FIX: Yahan 'Omit' hata kar seedha CartItem use karein
+  addToCart: (item: CartItem) => void; 
   removeFromCart: (id: string) => void;
   clearCart: () => void;
   getCartTotal: () => number;
@@ -25,13 +26,11 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  // LocalStorage se data load karna hydration safe tareeqe se
   useEffect(() => {
     const savedCart = localStorage.getItem('isblex_cart');
     if (savedCart) setCart(JSON.parse(savedCart));
   }, []);
 
-  // Jab bhi cart change ho, local storage update ho jaye
   useEffect(() => {
     if (cart.length > 0) {
       localStorage.setItem('isblex_cart', JSON.stringify(cart));
@@ -40,15 +39,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart]);
 
-  const addToCart = (product: Omit<CartItem, 'quantity'>) => {
+  // FIX: Ab yeh pura CartItem accept karega
+  const addToCart = (product: CartItem) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
       if (existingItem) {
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id ? { ...item, quantity: item.quantity + product.quantity } : item
         );
       }
-      return [...prevCart, { ...product, quantity: 1 }];
+      return [...prevCart, product];
     });
   };
 

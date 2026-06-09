@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from 'react';
-
+        import Link from 'next/link'
 interface ParticleInstance {
   x: number;
   y: number;
@@ -34,7 +34,7 @@ export default function HeroSection() {
     resizeCanvas();
 
     const particlesArray: ParticleInstance[] = [];
-    const numberOfParticles = window.innerWidth < 768 ? 40 : 80;
+    const numberOfParticles = window.innerWidth < 768 ? 30 : 60;
 
     class Particle implements ParticleInstance {
       x: number;
@@ -50,9 +50,9 @@ export default function HeroSection() {
 
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.size = Math.random() * 2 + 1;
-        this.speedX = (Math.random() * 1) - 0.5;
-        this.speedY = (Math.random() * 1) - 0.5;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = (Math.random() * 0.5) - 0.25;
+        this.speedY = (Math.random() * 0.5) - 0.25;
       }
 
       update() {
@@ -68,7 +68,8 @@ export default function HeroSection() {
 
       draw() {
         if (!ctx) return;
-        ctx.fillStyle = '#22D3EE';
+        // Luxury Gold Color for Particles (#B89B72)
+        ctx.fillStyle = '#B89B72';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -92,10 +93,10 @@ export default function HeroSection() {
           const dy = particlesArray[i].y - particlesArray[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 120) {
+          if (distance < 100) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(59, 130, 246, ${1 - distance / 120})`;
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(184, 155, 114, ${0.4 - distance / 250})`;
+            ctx.lineWidth = 0.5;
             ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
             ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
             ctx.stroke();
@@ -114,7 +115,8 @@ export default function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-[#030712] overflow-hidden">
+    // Background updated to Cream/Beige (#FDFBF7)
+    <section className="relative min-h-screen flex items-center justify-center bg-[#FDFBF7] overflow-hidden ">
       
       {/* Background Video Layer */}
       <video
@@ -122,66 +124,85 @@ export default function HeroSection() {
         loop
         muted
         playsInline
-        poster="/images/bg-image.png"
+        poster="/images/hair-after.png"
+        // 🛠️ Optimization: Opacity slightly reduced to 30% and mix-blend removed for better contrast with dark text on light bg
         className="absolute inset-0 w-full h-full object-cover z-0 opacity-30 pointer-events-none"
       >
         <source src="/videos/hero-bg.mp4" type="video/mp4" />
       </video>
 
-      {/* Dynamic Overlay Particles Layer */}
+      {/* 🛠️ NEW: Subtle Vignette Overlay for Readability */}
+      {/* Ye content ke peechay ek halka sa gradient add karta hai taake text clear nazar aaye */}
+      <div className="absolute inset-0 z-10 bg-radial-gradient from-transparent via-[#FDFBF7]/50 to-[#FDFBF7]/80 pointer-events-none" />
+
+      {/* Dynamic Overlay Particles Layer (Gold Dust) */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 z-10 opacity-50 pointer-events-none" 
+        // 🛠️ Optimization: Opacity reduced to 50% so they don't fight with text
+        className="absolute inset-0 z-20 opacity-50 pointer-events-none" 
       />
 
       {/* Hero Content Layer */}
-      <div className="relative z-20 flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto w-full pt-12">
+      {/* 🛠️ Z-index increased to 30 to stay on top of all overlays */}
+      <div className="relative z-30 flex flex-col items-center justify-center px-6 text-center max-w-4xl mx-auto w-full pt-12">
         
         {/* Luxury Top Badge */}
-        <div className="mb-8 inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111827]/60 backdrop-blur-md border border-[#1E293B] shadow-[0_0_15px_rgba(34,211,238,0.15)]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-          <span className="text-[10px] font-medium tracking-[0.25em] uppercase text-[#22D3EE]">
-            ISBLEX Illumination Systems
+        {/* 🛠️ Added shadow-md and slightly more opaque bg for contrast */}
+        <div className="mb-8 inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#FDFBF7]/80 backdrop-blur-sm border border-[#B89B72]/40 shadow-md">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse" />
+          <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-[#3E2A20]">
+            Prifya Premium Cosmetics
           </span>
         </div>
 
         {/* High-End Brand Headline */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.1] mb-6">
-          Sculpt Your Space. <br />
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-[#3B82F6] via-[#22D3EE] to-[#818cf8] drop-shadow-[0_0_25px_rgba(34,211,238,0.35)]">
-            Command the Aura.
+        {/* 🛠️ Increased font weight and text color is now solid Dark Brown for max readability */}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-[#3E2A20] tracking-tight leading-[1.15] mb-6 drop-shadow-sm">
+          Embrace Your <br />
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-[#8A9A86] via-[#B89B72] to-[#8A9A86]">
+            Natural Radiance.
           </span>
         </h1>
 
         {/* Premium Description Paragraph */}
-        <p className="text-sm sm:text-base md:text-lg text-[#94A3B8] mb-12 max-w-2xl mx-auto leading-relaxed font-light">
-          Architectural-grade smart ambient systems designed to redefine spatial limits. Synthesize over 16 million synchronized spectral hues smoothly with a single touch or vocal protocol.
+        {/* 🛠️ Text color made slightly darker (opacity 90%) for better contrast */}
+        <p className="text-sm sm:text-base md:text-lg text-[#3E2A20]/90 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+          Experience the pure essence of nature with our dermatologist-crafted formulas. Rejuvenate, protect, and glow with ingredients designed to honor your skin's true beauty.
         </p>
 
-        {/* Elite CTA Buttons Setup */}
-        <div className="flex flex-col sm:flex-row items-center justify-center w-full sm:w-auto gap-4 md:gap-6">
-          <button className="w-full sm:w-auto px-8 py-4 bg-[#3B82F6] hover:bg-[#2563EB] text-[#F8FAFC] text-xs font-semibold tracking-widest uppercase rounded-xl transition-all duration-300 shadow-[0_0_30px_rgba(59,130,246,0.25)] hover:shadow-[0_0_40px_rgba(59,130,246,0.5)] transform hover:-translate-y-0.5">
-            Discover the Systems
-          </button>
-          
-          <button className="w-full sm:w-auto px-8 py-4 bg-[#111827]/40 backdrop-blur-sm border border-[#1E293B] text-[#F8FAFC] hover:border-[#22D3EE] hover:text-[#22D3EE] text-xs font-semibold tracking-widest uppercase rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg">
-            Request Consultation
-          </button>
-        </div>
+      
+
+<div className="flex flex-col sm:flex-row items-center justify-center w-full sm:w-auto gap-4 md:gap-6">
+  {/* Products Page Link */}
+  <Link href="/products" className="w-full sm:w-auto">
+    <button className="w-full sm:w-auto px-8 py-4 bg-[#8A9A86] hover:bg-[#6A8F67] text-[#FDFBF7] text-xs font-bold tracking-widest uppercase rounded-xl transition-all duration-300 shadow-lg hover:shadow-[#8A9A86]/50 transform hover:-translate-y-0.5">
+      Shop Collection
+    </button>
+  </Link>
+  
+  {/* Contact Page Link */}
+  <Link href="/contact" className="w-full sm:w-auto">
+    <button className="w-full sm:w-auto px-8 py-4 bg-[#FDFBF7]/50 backdrop-blur-sm border-2 border-[#B89B72] text-[#3E2A20] hover:bg-[#B89B72] hover:text-[#FDFBF7] text-xs font-bold tracking-widest uppercase rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 shadow-sm">
+      Skin Consultation
+    </button>
+  </Link>
+</div>
+
 
         {/* Minimalist Trust Metrics */}
-        <div className="mt-16 pt-8 border-t border-[#1e293b]/40 w-full flex items-center justify-center gap-8 md:gap-12 text-[11px] tracking-widest text-[#64748B] uppercase font-medium flex-wrap">
+        {/* 🛠️ Border color darkened for visibility, font weight increased */}
+        <div className="mt-16 pt-8 border-t border-[#D0C9BC] w-full flex items-center justify-center gap-8 md:gap-12 text-[11px] tracking-widest text-[#3E2A20]/80 uppercase font-bold flex-wrap">
           <span className="flex items-center gap-2.5">
-            <span className="w-1 h-1 rounded-full bg-[#22D3EE]" />
-            Global Express Logistics
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B89B72]" />
+            100% Organic
           </span>
           <span className="flex items-center gap-2.5">
-            <span className="w-1 h-1 rounded-full bg-[#22D3EE]" />
-            5-Year Architectural Warranty
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B89B72]" />
+            Dermatologist Tested
           </span>
           <span className="flex items-center gap-2.5">
-            <span className="w-1 h-1 rounded-full bg-[#22D3EE]" />
-            Encrypted Checkout Protocols
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B89B72]" />
+            Cruelty-Free
           </span>
         </div>
 
